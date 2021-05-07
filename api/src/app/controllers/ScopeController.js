@@ -23,7 +23,7 @@ module.exports = {
 
   async show(req, res) {
     try {
-      const id = req.userId;
+      const { id } = req.params;
 
       const user = await User.findOne({
         where: { id },

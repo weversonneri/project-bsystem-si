@@ -39,14 +39,16 @@ module.exports = {
         },
       );
 
-      return res.json({
+      return res.status(200).json({
         token,
-        Name: user.name,
-        Email: user.email,
-        Scope: user.scope_id,
+        user: {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+        },
       });
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       return res.status(400).json(error);
     }
   },
