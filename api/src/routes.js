@@ -13,4 +13,6 @@ routes.delete('/users/:id', authMiddleware, UserController.delete);
 
 routes.post('/auth', AuthController.store);
 
+routes.get('/user/scope', authMiddleware, UserController.scope);
+
 module.exports = routes;

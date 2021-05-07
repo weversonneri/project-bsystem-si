@@ -1,4 +1,5 @@
 /* eslint-disable no-console */
+const jwt = require('jsonwebtoken');
 const { User } = require('../models');
 const { Scope } = require('../models');
 
@@ -83,6 +84,47 @@ module.exports = {
 
       return res.status(200).json(null);
     } catch (error) {
+      return res.status(400).json(error);
+    }
+  },
+
+  async scope(req, res) {
+    const { authorization } = req.headers;
+
+    if (!authorization) {
+      return res.status(401).json({ error: 'Login required!' });
+    }
+
+    const token = authorization.replace('Bearer', '').trim();
+
+    try {
+      if (!token) {
+        return res.status(401).json({ message: 'Nor authorized!' });
+      }
+
+      const data = jwt.decode(token);
+
+      if (!data) {
+        return res.status(401).json({ message: 'Nor authorized!' });
+      }
+
+      const { sub } = data;
+
+      const user = await User.findOne({
+        where: {
+          id: sub,
+        },
+        include: {
+          model: Scope,
+          attributes: ['name'],
+        },
+        raw: true,
+        nest: true,
+      });
+
+      return res.status(200).json(user.Scope.name);
+    } catch (error) {
+      console.log(error);
       return res.status(400).json(error);
     }
   },
