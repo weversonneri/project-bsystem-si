@@ -15,9 +15,9 @@ module.exports = {
         nest: true,
       });
       return res.status(200).json(users);
-    } catch (error) {
-      console.log(error);
-      return res.status(400).json(error);
+    } catch (err) {
+      console.log(err);
+      return res.status(400).json({ error: true, message: err.message });
     }
   },
 
@@ -31,8 +31,8 @@ module.exports = {
       });
 
       return res.status(200).json(user);
-    } catch (error) {
-      return res.status(400).json(null);
+    } catch (err) {
+      return res.status(400).json({ error: true, message: err.message });
     }
   },
 
@@ -46,10 +46,10 @@ module.exports = {
 
       console.log({ name, email, scope_id });
       return res.status(201).json({ name, email, scope_id });
-    } catch (error) {
-      console.log(error);
+    } catch (err) {
+      console.log(err);
 
-      return res.status(403).json(error);
+      return res.status(403).json({ error: true, message: err.message });
     }
   },
 
@@ -58,7 +58,7 @@ module.exports = {
       const user = await User.findByPk(req.userId);
 
       if (!user) {
-        return res.status(400).json({ errors: 'User not found!' });
+        return res.status(400).json({ error: 'User not found!' });
       }
 
       await user.update(req.body);
@@ -66,8 +66,8 @@ module.exports = {
       const { name, email } = user;
 
       return res.status(200).json({ name, email });
-    } catch (error) {
-      return res.status(400).json(error);
+    } catch (err) {
+      return res.status(400).json({ error: true, message: err.message });
     }
   },
 
@@ -76,14 +76,14 @@ module.exports = {
       const user = await User.findByPk(req.userId);
 
       if (!user) {
-        return res.status(400).json({ errors: 'User not found!' });
+        return res.status(400).json({ error: 'User not found!' });
       }
 
       await user.destroy();
 
       return res.status(200).json(null);
-    } catch (error) {
-      return res.status(400).json(error);
+    } catch (err) {
+      return res.status(400).json({ error: true, message: err.message });
     }
   },
 
