@@ -2,6 +2,7 @@ const {
   startOfHour,
   parseISO,
   isBefore,
+  getHours,
   /*  format,
    subHours, */
 } = require('date-fns');
@@ -9,14 +10,57 @@ const { User } = require('../models');
 const { Appointment } = require('../models');
 
 module.exports = {
+
+  async index(req, res) {
+    try {
+      const appointment = await Appointment.findAll({
+        // attributes: ['id', 'name', 'email'],
+        where: { status: 'A' },
+        include: [{
+          model: User,
+          as: 'user',
+          attributes: ['id', 'name', 'email'],
+        },
+        {
+          model: User,
+          as: 'provider',
+          attributes: ['id', 'name', 'email'],
+        }],
+        raw: true,
+        nest: true,
+      });
+
+      return res.status(200).json({ error: false, appointment });
+    } catch (err) {
+      // console.log(error);
+      return res.status(400).json({ error: true, message: err.message });
+    }
+  },
+
+  async show(req, res) {
+    try {
+      const { id } = req.body;
+
+      const appointment = await Appointment.findByPk(id);
+
+      return res.status(200).json({ error: false, appointment });
+    } catch (err) {
+      // console.log(error);
+      return res.status(400).json({ error: true, message: err.message });
+    }
+  },
+
   async store(req, res) {
     try {
       const { provider_id, date } = req.body;
 
+      const appointmentDate = startOfHour(parseISO(date));
+      console.log('PARSE DATE', appointmentDate);
+
       console.log(`Provider: ${req.userId} - UserID: ${req.userId}`);
 
       if (provider_id === req.userId) {
-        return res.status(401).json({ error: true, message: 'You can not create appointments for yourself' });
+        return res.status(401).json({ error: true, message: 'You cannot create appointments for yourself' });
       }
 
       const checkIsProvider = await User.findOne({
@@ -30,32 +74,45 @@ module.exports = {
         return res.status(401).json({ error: true, message: 'You can only create appointments with providers' });
       }
 
-      const hourStart = startOfHour(parseISO(date));
-      console.log('PARSE DATE', hourStart);
+      if (getHours(appointmentDate) < 8 || getHours(appointmentDate) > 18) {
+        return res.status(401).json({ error: true, message: 'You can only create appointments between 8:00 and 18:00' });
+      }
 
-      if (isBefore(hourStart, new Date())) {
-        return res.status(401).json({ error: true, message: 'Past date are not permitted' });
+      if (isBefore(appointmentDate, new Date())) {
+        return res.status(401).json({ error: true, message: 'You cannot create an appointment on past date' });
       }
 
       const checkIsAvailable = await Appointment.findOne({
         where: {
           provider_id,
+          user_id: req.userId,
           status: 'A',
-          date: hourStart,
+          date: appointmentDate,
         },
       });
 
       if (checkIsAvailable) {
-        return res.status(400).json({ error: 'Appointment date is not available' });
+        return res.status(401).json({ error: true, message: 'This appointment date is not available' });
       }
 
       const appointment = await Appointment.create({
         user_id: req.userId,
         provider_id,
-        date,
+        date: appointmentDate,
       });
 
       return res.status(200).json({ error: false, appointment });
+    } catch (err) {
+      // console.log(error);
+      return res.status(400).json({ error: true, message: err.message });
+    }
+  },
+
+  async delete(req, res) {
+    try {
+      const { id } = req.body;
+
+      return res.status(200).json({ error: false });
     } catch (err) {
       // console.log(error);
       return res.status(400).json({ error: true, message: err.message });

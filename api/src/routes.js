@@ -16,6 +16,9 @@ routes.delete('/users/:id', authMiddleware, UserController.delete);
 
 routes.get('/user/scope', authMiddleware, UserController.scope);
 
+routes.get('/appointment', authMiddleware, AppointmentController.index);
+routes.get('/appointment', authMiddleware, AppointmentController.show);
 routes.post('/appointment', authMiddleware, AppointmentController.store);
+routes.put('/appointment', authMiddleware, AppointmentController.delete);
 
 module.exports = routes;
