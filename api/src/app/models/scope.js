@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       Scope.hasMany(models.User, {
         foreignKey: 'scope_id',
+        // as: 'scope',
       });
     }
   }

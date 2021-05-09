@@ -16,21 +16,40 @@ module.exports = {
       },
       user_id: {
         type: Sequelize.INTEGER,
-        references: { model: 'Users', key: 'id' },
+        references: {
+          model: 'Users',
+          key: 'id',
+          as: 'user_id',
+        },
         onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
+        onDelete: 'SET NULL',
         allowNull: false,
       },
       provider_id: {
         type: Sequelize.INTEGER,
-        references: { model: 'Users', key: 'id' },
+        references: {
+          model: 'Users',
+          key: 'id',
+          as: 'provider_id',
+        },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
-        allowNull: true,
+        allowNull: false,
       },
+      /* service_id: {
+         type: Sequelize.INTEGER,
+         references: {
+           model: 'Services',
+           key: 'id',
+           as: 'service_id',
+         },
+         onUpdate: 'CASCADE',
+         onDelete: 'CASCADE',
+         allowNull: false,
+       }, */
       status: {
         allowNull: false,
-        type: Sequelize.DataTypes.ENUM('A', 'I'),
+        type: Sequelize.ENUM('A', 'I'),
         defaultValue: 'A',
       },
       created_at: {
