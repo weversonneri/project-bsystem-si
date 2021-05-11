@@ -55,9 +55,9 @@ module.exports = {
       const { provider_id, date } = req.body;
 
       const appointmentDate = startOfHour(parseISO(date));
-      console.log('PARSE DATE', appointmentDate);
+      // console.log('PARSE DATE', appointmentDate);
 
-      console.log(`Provider: ${req.userId} - UserID: ${req.userId}`);
+      // console.log(`Provider: ${req.userId} - UserID: ${req.userId}`);
 
       if (provider_id === req.userId) {
         return res.status(401).json({ error: true, message: 'You cannot create appointments for yourself' });
@@ -110,9 +110,19 @@ module.exports = {
 
   async delete(req, res) {
     try {
-      const { id } = req.body;
+      const { id } = req.params;
 
-      return res.status(200).json({ error: false });
+      const appointment = await Appointment.findByPk(id);
+
+      if (!appointment) {
+        return res.status(400).json({ error: true, message: 'User not found!' });
+      }
+
+      appointment.status = 'I';
+
+      await appointment.save();
+
+      return res.status(200).json({ error: false, appointment });
     } catch (err) {
       // console.log(error);
       return res.status(400).json({ error: true, message: err.message });

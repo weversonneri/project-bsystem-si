@@ -13,6 +13,7 @@ const AuthContext = createContext();
 function AuthProvider({ children }) {
   const [authenticated, setAuthenticated] = useState(false);
   const [userData, setUserData] = useState('');
+  // const [permission, setPermission] = useState('');
   const [loading, setLoading] = useState(true);
 
   const history = useHistory();

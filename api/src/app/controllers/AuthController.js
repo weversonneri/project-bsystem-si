@@ -12,6 +12,7 @@ module.exports = {
         where: { email },
         include: {
           model: Scope,
+          as: 'scope',
           attributes: ['name'],
         },
         raw: true,
@@ -32,7 +33,7 @@ module.exports = {
         {
           sub: user.id,
           email: user.email,
-          scopes: [user.Scope.name],
+          scopes: [user.scope.name],
         }, process.env.TOKEN_SECRET,
         {
           expiresIn: process.env.TOKEN_EXPIRATION,
@@ -45,10 +46,11 @@ module.exports = {
           id: user.id,
           name: user.name,
           email: user.email,
+          scopes: [user.scope.name],
         },
       });
     } catch (err) {
-      // console.log(error);
+      console.log(err);
       return res.status(400).json({ error: true, message: err.message });
     }
   },
