@@ -3,6 +3,7 @@ const UserController = require('./app/controllers/UserController');
 const AuthController = require('./app/controllers/AuthController');
 const AppointmentController = require('./app/controllers/AppointmentController');
 const ScheduleController = require('./app/controllers/ScheduleController');
+const AvailabilityController = require('./app/controllers/AvailabilityController');
 const authMiddleware = require('./app/middlewares/authMiddleware');
 
 const routes = express.Router();
@@ -23,5 +24,7 @@ routes.post('/appointment', authMiddleware, AppointmentController.store);
 routes.put('/appointment/:id', authMiddleware, AppointmentController.delete);
 
 routes.get('/schedule', authMiddleware, ScheduleController.index);
+
+routes.get('/providers/:id/availability', AvailabilityController.index);
 
 module.exports = routes;
