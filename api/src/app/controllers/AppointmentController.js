@@ -7,6 +7,7 @@ const {
    subHours, */
 } = require('date-fns');
 const { User } = require('../models');
+const { Service } = require('../models');
 const { Appointment } = require('../models');
 
 module.exports = {
@@ -14,7 +15,7 @@ module.exports = {
   async index(req, res) {
     try {
       const appointment = await Appointment.findAll({
-        // attributes: ['id', 'name', 'email'],
+        attributes: ['id', 'date', 'status'],
         where: { status: 'A' },
         include: [{
           model: User,
@@ -25,6 +26,11 @@ module.exports = {
           model: User,
           as: 'provider',
           attributes: ['id', 'name', 'email'],
+        },
+        {
+          model: Service,
+          as: 'service',
+          attributes: ['id', 'title'],
         }],
         raw: true,
         nest: true,
@@ -32,7 +38,6 @@ module.exports = {
 
       return res.status(200).json({ error: false, appointment });
     } catch (err) {
-      // console.log(error);
       return res.status(400).json({ error: true, message: err.message });
     }
   },
@@ -45,19 +50,15 @@ module.exports = {
 
       return res.status(200).json({ error: false, appointment });
     } catch (err) {
-      // console.log(error);
       return res.status(400).json({ error: true, message: err.message });
     }
   },
 
   async store(req, res) {
     try {
-      const { provider_id, date } = req.body;
+      const { provider_id, service_id, date } = req.body;
 
       const appointmentDate = startOfHour(parseISO(date));
-      // console.log('PARSE DATE', appointmentDate);
-
-      // console.log(`Provider: ${req.userId} - UserID: ${req.userId}`);
 
       if (provider_id === req.userId) {
         return res.status(401).json({ error: true, message: 'You cannot create appointments for yourself' });
@@ -97,25 +98,25 @@ module.exports = {
 
       const appointment = await Appointment.create({
         user_id: req.userId,
+        service_id,
         provider_id,
         date: appointmentDate,
       });
 
       return res.status(200).json({ error: false, appointment });
     } catch (err) {
-      // console.log(error);
       return res.status(400).json({ error: true, message: err.message });
     }
   },
 
   async delete(req, res) {
     try {
-      const { id } = req.params;
+      const { appointment_id } = req.params;
 
-      const appointment = await Appointment.findByPk(id);
+      const appointment = await Appointment.findByPk(appointment_id);
 
       if (!appointment) {
-        return res.status(400).json({ error: true, message: 'User not found!' });
+        return res.status(400).json({ error: true, message: 'Appointment not found!' });
       }
 
       appointment.status = 'I';
@@ -124,7 +125,6 @@ module.exports = {
 
       return res.status(200).json({ error: false, appointment });
     } catch (err) {
-      // console.log(error);
       return res.status(400).json({ error: true, message: err.message });
     }
   },

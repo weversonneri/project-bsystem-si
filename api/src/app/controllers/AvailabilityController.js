@@ -18,7 +18,18 @@ module.exports = {
   async index(req, res) {
     try {
       const { date } = req.query;
-      const { id } = req.params;
+      const { provider_id } = req.params;
+
+      const checkIsProvider = await User.findOne({
+        where: {
+          id: provider_id,
+          scope_id: 2,
+        },
+      });
+
+      if (!checkIsProvider) {
+        return res.status(401).json({ error: true, message: 'This user isnot a provider' });
+      }
 
       if (!date) {
         return res.status(400).json({ error: 'Invalid date' });
@@ -32,7 +43,7 @@ module.exports = {
 
       const appointments = await Appointment.findAll({
         where: {
-          provider_id: id,
+          provider_id,
           status: 'A',
           date: {
             [Op.between]: [startOfDay(searchDate), endOfDay(searchDate)],
@@ -56,20 +67,19 @@ module.exports = {
         '18:00',
       ];
 
-      const available = schedule.map((time) => {
-        const [hour, minute] = time.split(':');
-        const value = setSeconds(
+      const available = schedule.map((value) => {
+        const [hour, minute] = value.split(':');
+        const time = setSeconds(
           setMinutes(setHours(searchDate, hour), minute),
           0,
         );
 
         return {
-          time,
-          // format to: 2019-09-18T15:40:44-04:00
-          value: format(value, "yyyy-MM-dd'T'HH:mm:ssxxx"),
+          value,
+          time: format(time, "yyyy-MM-dd'T'HH:mm:ssxxx"),
           available:
-            isAfter(value, new Date())
-            && !appointments.find((a) => format(a.date, 'HH:mm') === time),
+            isAfter(time, new Date())
+            && !appointments.find((a) => format(a.date, 'HH:mm') === value),
         };
       });
 

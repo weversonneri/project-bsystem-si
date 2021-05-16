@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 const jwt = require('jsonwebtoken');
 const { User } = require('../models');
 const { Scope } = require('../models');
@@ -10,28 +9,28 @@ module.exports = {
         attributes: ['id', 'name', 'email'],
         include: {
           model: Scope,
+          as: 'scope',
           attributes: ['name'],
         },
         raw: true,
         nest: true,
       });
-      return res.status(200).json(users);
+      return res.status(200).json({ error: false, users });
     } catch (err) {
-      console.log(err);
       return res.status(400).json({ error: true, message: err.message });
     }
   },
 
   async show(req, res) {
     try {
-      const id = req.userId;
+      const { user_id } = req.params;
 
       const user = await User.findOne({
-        where: { id },
+        where: { id: user_id },
         attributes: ['id', 'name', 'email', 'scope_id'],
       });
 
-      return res.status(200).json(user);
+      return res.status(200).json({ error: false, user });
     } catch (err) {
       return res.status(400).json({ error: true, message: err.message });
     }
@@ -41,15 +40,16 @@ module.exports = {
     try {
       const user = req.body;
 
+      if (user.scope_id !== undefined) {
+        return res.status(401).json({ error: true, message: 'Not authorized to change scoope!' });
+      }
+
       await User.create(user);
 
       const { name, email, scope_id } = user;
 
-      console.log({ name, email, scope_id });
-      return res.status(201).json({ name, email, scope_id });
+      return res.status(201).json({ error: false, user: { name, email, scope_id } });
     } catch (err) {
-      console.log(err);
-
       return res.status(403).json({ error: true, message: err.message });
     }
   },
@@ -58,15 +58,21 @@ module.exports = {
     try {
       const user = await User.findByPk(req.userId);
 
-      if (!user) {
-        return res.status(400).json({ error: 'User not found!' });
+      const { body } = req;
+
+      if (body.scope_id !== undefined) {
+        return res.status(401).json({ error: true, message: 'Not authorized to change scoope!' });
       }
 
-      await user.update(req.body);
+      if (!user) {
+        return res.status(400).json({ error: true, message: 'User not found!' });
+      }
 
-      const { name, email } = user;
+      const update = await user.update(req.body);
 
-      return res.status(200).json({ name, email });
+      const { id, name, email } = update;
+
+      return res.status(200).json({ error: false, user: { id, name, email } });
     } catch (err) {
       return res.status(400).json({ error: true, message: err.message });
     }
@@ -77,12 +83,12 @@ module.exports = {
       const user = await User.findByPk(req.userId);
 
       if (!user) {
-        return res.status(400).json({ error: 'User not found!' });
+        return res.status(400).json({ error: true, message: 'User not found!' });
       }
 
       await user.destroy();
 
-      return res.status(200).json(null);
+      return res.status(200).json({ error: false, message: null });
     } catch (err) {
       return res.status(400).json({ error: true, message: err.message });
     }
@@ -92,20 +98,20 @@ module.exports = {
     const { authorization } = req.headers;
 
     if (!authorization) {
-      return res.status(401).json({ error: 'Login required!' });
+      return res.status(401).json({ error: true, message: 'Login required!' });
     }
 
     const token = authorization.replace('Bearer', '').trim();
 
     try {
       if (!token) {
-        return res.status(401).json({ message: 'Not authorized!' });
+        return res.status(401).json({ error: true, message: 'Not authorized!' });
       }
 
       const data = jwt.decode(token);
 
       if (!data) {
-        return res.status(401).json({ message: 'Not authorized!' });
+        return res.status(401).json({ error: true, message: 'Not authorized!' });
       }
 
       const { sub } = data;
@@ -122,9 +128,8 @@ module.exports = {
         nest: true,
       });
 
-      return res.status(200).json(user.Scope.name);
+      return res.status(200).json({ error: false, message: user.Scope.name });
     } catch (err) {
-      console.log(err);
       return res.status(400).json({ error: true, message: err.message });
     }
   },
