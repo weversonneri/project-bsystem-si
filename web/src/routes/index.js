@@ -1,14 +1,20 @@
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch } from 'react-router-dom';
 import Login from '../pages/login';
+import Register from '../pages/register';
 import Dashboard from '../pages/dashboard';
 import CustomRoute from './CustomRoute';
 
 function Routes() {
   return (
     <Switch>
-      <Route exact path="/" component={Login} />
-      <CustomRoute scope path="/dashboard" component={Dashboard} />
+      <CustomRoute exact path="/" component={Login} />
+      <CustomRoute exact path="/register" component={Register} />
+      <CustomRoute
+        isPrivate
+        path="/dashboard"
+        component={Dashboard}
+      />
 
     </Switch>
   );

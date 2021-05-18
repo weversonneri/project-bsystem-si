@@ -1,70 +1,95 @@
 import React, {
   createContext,
+  useCallback,
   useContext,
-  useEffect,
   useState,
 } from 'react';
-
 import { useHistory } from 'react-router-dom';
+
+// import { useHistory } from 'react-router-dom';
 import api from '../services/api';
 
 const AuthContext = createContext();
 
 function AuthProvider({ children }) {
-  const [authenticated, setAuthenticated] = useState(false);
-  const [userData, setUserData] = useState('');
   // const [permission, setPermission] = useState('');
-  const [loading, setLoading] = useState(true);
 
-  const history = useHistory();
-
-  useEffect(() => {
+  const [data, setData] = useState(() => {
     const token = localStorage.getItem('@Bsys:token');
-    const user = localStorage.getItem('@Bsys:user');
 
     if (token) {
       api.defaults.headers.Authorization = `Bearer ${JSON.parse(token)}`;
-      setUserData(JSON.parse(user));
-      setAuthenticated(true);
+
+      return { token };
     }
+    return {};
+  });
 
-    setLoading(false);
-  }, []);
+  const history = useHistory();
 
-  async function handleLogin({ email, password }) {
-    const { data: { token, user } } = await api.post('/api/auth', {
+  // useEffect(() => {
+  //   const token = localStorage.getItem('@Bsys:token');
+  //   const user = localStorage.getItem('@Bsys:user');
+
+  //   if (token) {
+  //     api.defaults.headers.Authorization = `Bearer ${JSON.parse(token)}`;
+  //     setUserData(JSON.parse(user));
+  //   }
+
+  //   setLoading(false);
+  // }, []);
+
+  const handleSignIn = useCallback(async ({ email, password }) => {
+    const response = await api.post('/api/auth', {
       email,
       password,
+    }).catch((error) => {
+      if (error.response) {
+        console.log(error.response.data);
+      } else {
+        // Something happened in setting up the request that triggered an
+        console.log('Error', error.message);
+      }
+      return error;
     });
 
-    setUserData(user);
+    console.log(response.data);
+
+    const { token, user } = response.data;
+
+    setData(token);
+
+    console.log(token, user);
 
     localStorage.setItem('@Bsys:token', JSON.stringify(token));
     localStorage.setItem('@Bsys:user', JSON.stringify(user));
 
-    api.defaults.headers.Authorization = `Bearer ${token}`;
-    setAuthenticated(true);
     history.push('/dashboard');
-  }
+  }, []);
 
-  function handleLogout() {
-    setAuthenticated(false);
+  const isAuthenticated = () => {
+    const token = localStorage.getItem('@Bsys:token');
+    if (token) {
+      return true;
+    }
+    return false;
+  };
 
+  function handleSigOut() {
     localStorage.removeItem('@Bsys:token');
     localStorage.removeItem('@Bsys:user');
 
-    api.defaults.headers.Authorization = undefined;
+    setData({});
     history.push('/');
   }
 
   return (
     <AuthContext.Provider value={
       {
-        userData,
-        authenticated,
-        handleLogin,
-        handleLogout,
-        loading,
+        data,
+        isAuthenticated,
+        handleSignIn,
+        handleSigOut,
       }
     }
     >
@@ -73,6 +98,11 @@ function AuthProvider({ children }) {
   );
 }
 
-const useAuth = () => useContext(AuthContext);
+// const useAuth = () => useContext(AuthContext);
+
+const useAuth = () => {
+  const context = useContext(AuthContext);
+  return context;
+};
 
 export { useAuth, AuthProvider };

@@ -1,22 +1,18 @@
 import React, { useState } from 'react';
-import { useAuth } from '../context/AuthContext';
 
-function Login() {
+function Register() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const { handleSignIn } = useAuth();
-
-  const handleSubmit = async (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
 
-    await handleSignIn({ email, password });
+    console.log({ email, password });
   };
 
   return (
     <>
-      <h1>Login</h1>
-
+      <h1>Register</h1>
       <div className="container" onSubmit={handleSubmit}>
         <form action="" className="form">
           <div>
@@ -45,4 +41,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Register;

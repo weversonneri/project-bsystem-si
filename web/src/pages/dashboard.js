@@ -5,13 +5,12 @@ import api from '../services/api';
 
 function Dashboard() {
   const [users, setUsers] = useState([]);
-  const { handleLogout, userData } = useAuth();
+  const { handleSigOut } = useAuth();
 
   useEffect(() => {
     (async () => {
       const { data } = await api.get('/api/users');
-
-      setUsers(data);
+      setUsers(data.users);
     })();
   }, []);
 
@@ -23,10 +22,8 @@ function Dashboard() {
         ))}
       </ul>
 
-      <button type="button" onClick={handleLogout}>logout</button>
+      <button type="button" onClick={handleSigOut}>logout</button>
 
-      <h1>{userData.name}sd</h1>
-      <h1>{userData.email}sd</h1>
     </>
   );
 }
