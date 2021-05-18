@@ -123,12 +123,15 @@ module.exports = {
         include: {
           model: Scope,
           attributes: ['name'],
+          as: 'scope',
         },
         raw: true,
         nest: true,
       });
 
-      return res.status(200).json({ error: false, message: user.Scope.name });
+      const { name } = user.scope;
+
+      return res.status(200).json({ error: false, message: name });
     } catch (err) {
       return res.status(400).json({ error: true, message: err.message });
     }

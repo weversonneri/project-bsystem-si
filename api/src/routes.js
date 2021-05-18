@@ -13,14 +13,15 @@ const routes = express.Router();
 routes.post('/auth', AuthController.store);
 routes.post('/users', UserController.store);
 
+routes.get('/users/scope', authMiddleware, UserController.scope);
+
 routes.get('/users', authMiddleware, UserController.index);
 routes.get('/users/:user_id', authMiddleware, UserController.show);
 routes.put('/users', authMiddleware, UserController.update);
 routes.delete('/users', authMiddleware, UserController.delete);
 
-routes.get('/users/scope', authMiddleware, UserController.scope);
-
 routes.get('/providers', authMiddleware, ProviderController.index);
+routes.post('/providers', authMiddleware, ProviderController.store);
 
 routes.get('/appointments', authMiddleware, AppointmentController.index);
 routes.get('/appointments', authMiddleware, AppointmentController.show);

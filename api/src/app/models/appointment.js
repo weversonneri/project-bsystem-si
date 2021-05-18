@@ -30,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
     date: DataTypes.DATE,
     status: {
       allowNull: false,
-      type: DataTypes.ENUM('A', 'I'),
+      type: DataTypes.ENUM('A', 'I', 'C'),
       defaultValue: 'A',
     },
   }, {
