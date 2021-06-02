@@ -50,7 +50,6 @@ module.exports = {
         },
       });
     } catch (err) {
-      console.log(err);
       return res.status(400).json({ error: true, message: err.message });
     }
   },

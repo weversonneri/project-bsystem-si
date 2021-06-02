@@ -3,7 +3,7 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('Appointments', {
+    await queryInterface.createTable('appointments', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -17,7 +17,7 @@ module.exports = {
       user_id: {
         type: Sequelize.INTEGER,
         references: {
-          model: 'Users',
+          model: 'users',
           key: 'id',
           as: 'user_id',
         },
@@ -28,7 +28,7 @@ module.exports = {
       provider_id: {
         type: Sequelize.INTEGER,
         references: {
-          model: 'Users',
+          model: 'users',
           key: 'id',
         },
         onUpdate: 'CASCADE',
@@ -38,7 +38,7 @@ module.exports = {
       service_id: {
         type: Sequelize.INTEGER,
         references: {
-          model: 'Services',
+          model: 'services',
           key: 'id',
         },
         onUpdate: 'CASCADE',
@@ -61,6 +61,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('Appointments');
+    await queryInterface.dropTable('appointments');
   },
 };

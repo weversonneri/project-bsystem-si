@@ -61,7 +61,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'User',
-    tableName: 'Users',
+    tableName: 'users',
   });
   User.addHook('beforeSave', async (user) => {
     if (user.password) {

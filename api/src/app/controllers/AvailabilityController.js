@@ -51,8 +51,6 @@ module.exports = {
         },
       });
 
-      // console.log('APPOINTMENTS', appointments);
-
       const schedule = [
         '08:00', // 2019-09-18 08:00:00
         '09:00', // 2019-09-18 09:00:00

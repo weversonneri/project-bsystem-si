@@ -1,14 +1,15 @@
 // eslint-disable-next-line
 'use strict';
+const bcrypt = require('bcryptjs');
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkInsert('Users', [
+    await queryInterface.bulkInsert('users', [
       {
-        name: 'John Doe',
+        name: 'Admin',
         email: 'admin@mail.com',
         scope_id: 1,
-        password_hash: 'admin',
+        password_hash: await bcrypt.hash('admin123', 8),
         created_at: new Date().toDateString(),
         updated_at: new Date().toDateString(),
       },
@@ -16,6 +17,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkDelete('Users', null, {});
+    await queryInterface.bulkDelete('users', null, {});
   },
 };
