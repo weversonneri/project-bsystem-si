@@ -4,6 +4,4 @@ node_modules
 
 .eslintrc.js
 
-.sequelizerc
-
 .editorconfig
