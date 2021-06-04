@@ -1,17 +1,35 @@
 import React from 'react';
-import { View, Button } from 'react-native';
+import {
+  View,
+  Button,
+  SafeAreaView,
+  TouchableWithoutFeedback,
+  Keyboard,
+  Platform,
+  KeyboardAvoidingView,
+} from 'react-native';
 import { useAuth } from '../../contexts/auth';
+import { styles } from './styles';
 
 const Dashboard = () => {
-  const { handleSignOut, user } = useAuth();
-
-  console.log(user)
+  const { signOut } = useAuth();
 
   return (
-    <View View >
-      <Button title="SignOut" onPress={handleSignOut} />
-    </View >
-  )
-}
+    <SafeAreaView style={styles.container}>
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      >
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View style={styles.content}>
+            <Button title="SignOut" onPress={signOut} />
+          </View>
+
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
+
+  );
+};
 
 export default Dashboard;

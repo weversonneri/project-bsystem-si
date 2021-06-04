@@ -4,7 +4,7 @@ module.exports = {
     host: 'localhost',
     username: 'postgres',
     password: 'docker',
-    database: 'mainbsystemdb',
+    database: 'meusalaodb',
     define: {
       timestamps: true,
       underscored: true,

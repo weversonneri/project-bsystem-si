@@ -13,10 +13,10 @@ const Routes = () => {
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <ActivityIndicator size="large" color="#999" />
       </View>
-    )
+    );
   }
 
   return signed ? <AppRoutes /> : <AuthRoutes />;
-}
+};
 
 export default Routes;

@@ -1,8 +1,9 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, {
+  createContext, useContext, useEffect, useState,
+} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import api from '../services/api';
-import { signIn } from '../services/auth';
 
 const AuthContext = createContext();
 
@@ -28,7 +29,7 @@ const AuthProvider = ({ children }) => {
     getStoredData();
   }, []);
 
-  async function handleSignIn({ email, password }) {
+  async function signIn({ email, password }) {
     const response = await api.post('/auth', {
       email,
       password,
@@ -36,7 +37,7 @@ const AuthProvider = ({ children }) => {
       if (error.response) {
         console.log(error.response.data);
       } else {
-        //Something happened in setting up the request that triggered an
+        // Something happened in setting up the request that triggered an
         console.log('Error', error.message);
       }
       return error;
@@ -48,18 +49,21 @@ const AuthProvider = ({ children }) => {
     await AsyncStorage.setItem('@Bsys:user', JSON.stringify(response.data.user));
   }
 
-  async function handleSignOut() {
+  async function signOut() {
     AsyncStorage.clear().then(() => {
       setUser(null);
-    })
+    });
   }
 
   return (
-    <AuthContext.Provider value={{ signed: !!user, user, handleSignIn, handleSignOut, loading }}>
+    <AuthContext.Provider value={{
+      signed: !!user, user, signIn, signOut, loading,
+    }}
+    >
       {children}
     </AuthContext.Provider>
-  )
-}
+  );
+};
 
 const useAuth = () => {
   const context = useContext(AuthContext);
@@ -67,4 +71,3 @@ const useAuth = () => {
 };
 
 export { useAuth, AuthProvider };
-

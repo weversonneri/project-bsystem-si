@@ -33,12 +33,12 @@ app.use((error, req, res, next) => {
 });
 
 app.listen(PORT, () => {
-  console.log('🔥 Server started');
+  console.log('🔥 Server up');
 
   sequelize.authenticate().then(() => {
-    console.log('✅ Successfully connected with database.');
+    console.log('📦 Connected to db.');
   })
     .catch((error) => {
-      console.error('❌ Unable to connect to the database: ', error);
+      console.error('❌ DB connection error: ', error);
     });
 });

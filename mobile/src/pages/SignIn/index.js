@@ -1,47 +1,145 @@
 import React, { useState } from 'react';
-import { View, Button, TextInput, StyleSheet } from 'react-native';
+import {
+  View,
+  Text,
+  SafeAreaView,
+  KeyboardAvoidingView,
+  Platform,
+  TouchableWithoutFeedback,
+  Keyboard,
+  TouchableOpacity,
+} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { Field, Formik } from 'formik';
+import * as yup from 'yup';
+
 import { useAuth } from '../../contexts/auth';
 
-const SignIn = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const { handleSignIn, signed } = useAuth();
+import { Button } from '../../components/Button';
+import { styles } from './styles';
+import { Input } from '../../components/Input';
 
-  console.log(signed);
-
-  async function handleSubmit() {
-    await handleSignIn({ email, password });
-
-    console.log('DADOS: ');
-  }
-  return (
-    <>
-      <View>
-        <TextInput
-          style={styles.input}
-          onChangeText={setEmail}
-          value={email}
-        />
-        <TextInput
-          style={styles.input}
-          onChangeText={setPassword}
-          value={password}
-        />
-      </View >
-      <View>
-        <Button title="SignIn" onPress={handleSubmit} ></Button>
-      </View >
-    </>
-  );
-};
-
-const styles = StyleSheet.create({
-  input: {
-    height: 40,
-    margin: 12,
-    borderWidth: 1,
-  },
+const loginValidationSchema = yup.object().shape({
+  email: yup
+    .string()
+    .email('Por favor, insira um email válido')
+    .required('Email Address is Required'),
+  password: yup
+    .string()
+    .min(6, ({ min }) => `Tamanho mínimo de senha de ${min} caracteres`)
+    .required('Password is required'),
 });
 
+export function SignIn() {
+  // const [email, setEmail] = useState('');
+  // const [password, setPassword] = useState('');
+  // const [isFocused, setIsFocused] = useState(false);
+  // const [isFilled, setIsFilled] = useState(false);
 
-export default SignIn;
+  const { signIn } = useAuth();
+
+  const navigation = useNavigation();
+
+  async function handleSignIn({ email, password }) {
+    await signIn({ email, password });
+    console.log('VALORES DE', email, password);
+  }
+
+  function handleSigUp() {
+    navigation.navigate('SignUp');
+  }
+
+  // function handleInputBlur() {
+  //   setIsFocused(false);
+  //   setIsFilled(!!email);
+  // }
+
+  // function handleInpuFocus() {
+  //   setIsFocused(true);
+  // }
+
+  // function handleInpuChange(value) {
+  //   setIsFilled(!!value);
+  //   setEmail(value);
+  // }
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      >
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View style={styles.content}>
+
+            {/* <TextInput
+                style={[
+                  styles.input,
+                  (isFocused || isFilled) && { borderColor: colors.green },
+                ]}
+                placeholder="Digite seu email"
+                onBlur={handleInputBlur}
+                onFocus={handleInpuFocus}
+                onChangeText={handleInpuChange}
+                keyboardType="email-address"
+              />
+
+              <View style={styles.buttonContainer}>
+                <Button
+                  title="Entrar"
+                />
+              </View> */}
+
+            <View style={styles.form}>
+              <Text style={styles.text}>
+                Realizar login
+              </Text>
+              <Formik
+                validationSchema={loginValidationSchema}
+                initialValues={{
+                  email: '',
+                  password: '',
+                }}
+                onSubmit={(values) => handleSignIn(values)}
+              >
+                {({ handleSubmit, isValid }) => (
+                  <>
+                    <Field
+                      component={Input}
+                      name="email"
+                      placeholder="Digite seu email"
+                      keyboardType="email-address"
+                    />
+                    <Field
+                      component={Input}
+                      name="Digite a sua senha"
+                      placeholder="Password"
+                      secureTextEntry
+                    />
+                    <View style={styles.buttonContainer}>
+                      <Button
+                        onPress={handleSubmit}
+                        title="Entrar"
+                        disabled={!isValid}
+                      />
+                    </View>
+                  </>
+                )}
+              </Formik>
+            </View>
+            <TouchableOpacity
+              style={{
+                width: '100%', height: 30, justifyContent: 'center', alignItems: 'center',
+              }}
+              onPress={handleSigUp}
+            >
+              <Text>
+                sdfsd
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
+  );
+}
