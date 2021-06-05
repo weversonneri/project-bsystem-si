@@ -15,6 +15,8 @@ module.exports = (sequelize, DataTypes) => {
 
       User.hasMany(models.Appointment, { foreignKey: 'user_id', as: 'appointments' });
 
+      User.hasOne(models.User_token, { foreignKey: 'user_id', as: 'user_token' });
+
       User.belongsToMany(models.Service, { foreignKey: 'provider_id', through: 'Provider_services', as: 'services' });
     }
   }
@@ -44,6 +46,7 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
     scope_id: DataTypes.INTEGER,
+    avatar: DataTypes.STRING,
     password_hash: {
       type: DataTypes.STRING,
       defaultValue: '',
