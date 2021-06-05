@@ -1,4 +1,5 @@
 const express = require('express');
+const multer = require('multer');
 const UserController = require('./app/controllers/UserController');
 const AuthController = require('./app/controllers/AuthController');
 const AppointmentController = require('./app/controllers/AppointmentController');
@@ -9,6 +10,7 @@ const authMiddleware = require('./app/middlewares/authMiddleware');
 const ProviderController = require('./app/controllers/ProviderController');
 const AvatarController = require('./app/controllers/AvatarController');
 const ForgotPasswordController = require('./app/controllers/ForgotPasswordController');
+
 const uploadConfig = require('./config/upload');
 
 const upload = multer(uploadConfig);
@@ -31,6 +33,7 @@ routes.patch(
   upload.single('avatar'),
   AvatarController.update,
 );
+
 routes.get('/providers', authMiddleware, ProviderController.index);
 routes.post('/providers', authMiddleware, ProviderController.store);
 
@@ -49,4 +52,5 @@ routes.get('/providers/:provider_id/availability', authMiddleware, AvailabilityC
 
 routes.post('/forgot-password', ForgotPasswordController.store);
 routes.post('/reset-password', ForgotPasswordController.update);
+
 module.exports = routes;
