@@ -4,6 +4,7 @@ const cors = require('cors');
 const routes = require('./routes');
 const { sequelize } = require('./app/models/index');
 require('dotenv').config();
+const uploadConfig = require('./config/upload');
 
 const app = express();
 
@@ -14,6 +15,7 @@ app.use(express.urlencoded({ extended: false }));
 
 const PORT = process.env.PORT || 3333;
 
+app.use('/api/files', express.static(uploadConfig.directory));
 app.use('/api', routes);
 
 app.use((req, res, next) => {
