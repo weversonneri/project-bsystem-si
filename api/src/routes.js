@@ -23,6 +23,12 @@ routes.get('/users/:user_id', authMiddleware, UserController.show);
 routes.put('/users', authMiddleware, UserController.update);
 routes.delete('/users', authMiddleware, UserController.delete);
 
+routes.patch(
+  '/users/upload-avatar',
+  authMiddleware,
+  upload.single('avatar'),
+  AvatarController.update,
+);
 routes.get('/providers', authMiddleware, ProviderController.index);
 routes.post('/providers', authMiddleware, ProviderController.store);
 
