@@ -8,6 +8,7 @@ const ServiceController = require('./app/controllers/ServiceController');
 const authMiddleware = require('./app/middlewares/authMiddleware');
 const ProviderController = require('./app/controllers/ProviderController');
 const AvatarController = require('./app/controllers/AvatarController');
+const ForgotPasswordController = require('./app/controllers/ForgotPasswordController');
 const uploadConfig = require('./config/upload');
 
 const upload = multer(uploadConfig);
