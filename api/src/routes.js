@@ -7,6 +7,7 @@ const AvailabilityController = require('./app/controllers/AvailabilityController
 const ServiceController = require('./app/controllers/ServiceController');
 const authMiddleware = require('./app/middlewares/authMiddleware');
 const ProviderController = require('./app/controllers/ProviderController');
+const AvatarController = require('./app/controllers/AvatarController');
 const uploadConfig = require('./config/upload');
 
 const upload = multer(uploadConfig);
