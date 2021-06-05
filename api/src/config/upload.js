@@ -1,9 +1,9 @@
-import multer from 'multer';
-import path from 'path';
+const multer = require('multer');
+const path = require('path');
 
 const uploadAvatar = path.resolve(__dirname, '..', '..', 'uploads');
 
-export default {
+module.exports = {
   directory: uploadAvatar,
   storage: multer.diskStorage({
     destination: uploadAvatar,
