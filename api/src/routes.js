@@ -47,4 +47,6 @@ routes.get('/schedules', authMiddleware, ScheduleController.index);
 
 routes.get('/providers/:provider_id/availability', authMiddleware, AvailabilityController.index);
 
+routes.post('/forgot-password', ForgotPasswordController.store);
+routes.post('/reset-password', ForgotPasswordController.update);
 module.exports = routes;
