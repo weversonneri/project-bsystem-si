@@ -30,7 +30,8 @@ module.exports = {
         subject: 'test reuc',
         template: 'forgot_password',
         context: {
-          token: `http://localhost:3333/api/appointments?token=${token.password_reset_token}`,
+          name: user.name,
+          token: `http://localhost:3333/api/reset-password?token=${token.password_reset_token}`,
         },
       });
 
