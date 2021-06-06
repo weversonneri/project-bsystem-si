@@ -28,6 +28,7 @@ module.exports = {
           email: user.email,
         },
         subject: 'test reuc',
+        template: 'forgot_password',
         context: {
           token: `http://localhost:3333/api/appointments?token=${token.password_reset_token}`,
         },

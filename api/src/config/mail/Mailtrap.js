@@ -1,6 +1,6 @@
 const nodemailer = require('nodemailer');
-const handlebars = require('handlebars');
-const fs = require('fs');
+const exphbs = require('express-handlebars');
+const nodemailerhbs = require('nodemailer-express-handlebars');
 const path = require('path');
 
 module.exports = {
@@ -8,38 +8,47 @@ module.exports = {
     to,
     subject,
     context,
+    template,
   }) {
-    try {
-      // create reusable transporter object using the default SMTP transport
-      const transporter = nodemailer.createTransport({
-        host: 'smtp.mailtrap.io',
-        port: 2525,
-        auth: {
-          user: 'e285b9aa54bbfc',
-          pass: '841642e6a883c6',
-        },
-      });
+    // create reusable transporter object using the default SMTP transport
+    const transporter = nodemailer.createTransport({
+      host: 'smtp.mailtrap.io',
+      port: 2525,
+      auth: {
+        user: 'e285b9aa54bbfc',
+        pass: '841642e6a883c6',
+      },
+    });
 
-      const source = fs.readFileSync(path.join(__dirname, 'template.hbs'), 'utf8');
-      // Create email generator
-      const template = handlebars.compile(source);
+    const viewPath = path.resolve(__dirname, '..', '..', 'app', 'views');
 
-      // send mail with defined transport object
-      const info = await transporter.sendMail({
-        from: 'test@test.com',
-        to: {
-          name: to.name,
-          address: to.email,
-        },
-        subject,
-        html: template(context),
-      });
+    transporter.use(
+      'compile',
+      nodemailerhbs({
+        viewEngine: exphbs.create({
+          layoutsDir: path.resolve(viewPath, 'layouts'),
+          partialsDir: path.resolve(viewPath, 'partials'),
+          defaultLayout: 'default',
+          extname: '.hbs',
+        }),
+        viewPath,
+        extName: '.hbs',
+      }),
+    );
 
-      console.log('Message sent: %s', info.messageId);
+    // send mail with defined transport object
+    const info = await transporter.sendMail({
+      from: 'test@test.com',
+      to: {
+        name: to.name,
+        address: to.email,
+      },
+      subject,
+      template,
+      context,
+    });
 
-      console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-    } catch (err) {
-      console.error(err);
-    }
+    console.log('Message sent: %s', info.messageId);
+    console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
   },
 };
