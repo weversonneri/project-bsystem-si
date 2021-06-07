@@ -3,21 +3,29 @@ import colors from '../../styles/colors';
 import fonts from '../../styles/fonts';
 
 export const styles = StyleSheet.create({
+  main: {
+    flex: 1,
+    backgroundColor: colors.purple,
+    justifyContent: 'flex-end',
+  },
   container: {
     flex: 1,
     width: '100%',
-    alignItems: 'center',
-    justifyContent: 'space-around',
+
   },
   content: {
-    flex: 1,
+    flex: 3,
     width: '100%',
+    backgroundColor: colors.white,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+
   },
   form: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 54,
+    paddingHorizontal: 40,
   },
   text: {
     fontFamily: fonts.semiBold,
@@ -29,5 +37,13 @@ export const styles = StyleSheet.create({
   buttonContainer: {
     marginTop: 40,
     width: '100%',
+  },
+  createAccountText: {
+    color: colors.normaltext,
+  },
+  innerCreateAccountText: {
+    color: colors.purple,
+    fontSize: 15,
+    fontWeight: 'bold',
   },
 });

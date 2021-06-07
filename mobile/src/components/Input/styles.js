@@ -3,23 +3,49 @@ import colors from '../../styles/colors';
 import fonts from '../../styles/fonts';
 
 export const styles = StyleSheet.create({
-  input: {
-    borderBottomWidth: 1,
-    borderColor: colors.purple,
-    color: colors.orange,
-    fontSize: 18,
+  inputContainer: {
+    paddingHorizontal: 10,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: 'transparent',
     width: '100%',
     marginTop: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: colors.background,
+  },
+  input: {
+    fontFamily: fonts.regular,
+    color: colors.normaltext,
+    fontSize: 15,
     padding: 10,
-    textAlign: 'center',
+    textAlign: 'left',
+    width: '100%',
+    marginEnd: 2,
+  },
+  icon: {
+    color: colors.darkgray,
+    marginHorizontal: 2,
+    fontSize: 15,
+  },
+  inputIsFocused: {
+    borderWidth: 1,
+    borderColor: colors.purple,
   },
   errorText: {
     fontFamily: fonts.regular,
     fontSize: 10,
-    textAlign: 'left',
     color: colors.red,
+    alignSelf: 'flex-start',
   },
   errorInput: {
+    borderWidth: 1,
     borderColor: colors.red,
+  },
+  errorIcon: {
+    color: colors.red,
+  },
+  succsessIcon: {
+    color: colors.purple,
   },
 });

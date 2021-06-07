@@ -20,13 +20,13 @@ module.exports = {
       });
 
       if (!user) {
-        return res.status(401).json({ error: 'User not found!' });
+        return res.status(401).json({ error: true, message: 'User not found!' });
       }
 
       const isValidPassword = await bcrypt.compare(password, user.password_hash);
 
       if (!isValidPassword) {
-        return res.status(403).json({ error: 'Incorrect email or password!' });
+        return res.status(403).json({ error: true, message: 'Incorrect email or password!' });
       }
 
       const token = jwt.sign(

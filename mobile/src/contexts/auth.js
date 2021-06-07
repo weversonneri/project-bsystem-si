@@ -33,14 +33,6 @@ const AuthProvider = ({ children }) => {
     const response = await api.post('/auth', {
       email,
       password,
-    }).catch((error) => {
-      if (error.response) {
-        console.log(error.response.data);
-      } else {
-        // Something happened in setting up the request that triggered an
-        console.log('Error', error.message);
-      }
-      return error;
     });
 
     setUser(response.data.user);

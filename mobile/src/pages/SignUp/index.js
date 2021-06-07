@@ -61,7 +61,7 @@ export function SignUp() {
       navigation.goBack();
     } catch (err) {
       Alert.alert(
-        'Erro na cadastro',
+        'Erro ao realizar cadastro',
         err.response.data.message,
       );
     }

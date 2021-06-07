@@ -5,7 +5,7 @@ async function authMiddleware(req, res, next) {
   const { authorization } = req.headers;
 
   if (!authorization) {
-    return res.status(401).json({ error: 'Login required!' });
+    return res.status(401).json({ error: true, message: 'Login required!' });
   }
 
   const token = authorization.replace('Bearer', '').trim();
@@ -23,7 +23,7 @@ async function authMiddleware(req, res, next) {
     });
 
     if (!user) {
-      return res.status(401).json({ error: 'Invalid user.' });
+      return res.status(401).json({ error: true, message: 'Invalid user.' });
     }
 
     req.userId = sub;
@@ -31,7 +31,7 @@ async function authMiddleware(req, res, next) {
 
     return next();
   } catch (error) {
-    return res.status(401).json({ error: 'Invalid or expired token.' });
+    return res.status(401).json({ error: true, message: 'Invalid or expired token.' });
   }
 }
 

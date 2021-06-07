@@ -8,6 +8,9 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   TouchableOpacity,
+  Alert,
+  StatusBar,
+  ScrollView,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Field, Formik } from 'formik';
@@ -18,16 +21,17 @@ import { useAuth } from '../../contexts/auth';
 import { Button } from '../../components/Button';
 import { styles } from './styles';
 import { Input } from '../../components/Input';
+import colors from '../../styles/colors';
 
 const loginValidationSchema = yup.object().shape({
   email: yup
     .string()
-    .email('Por favor, insira um email válido')
-    .required('Email Address is Required'),
+    .email('Precisamos de um email válido')
+    .required('Preencha com seu email'),
   password: yup
     .string()
-    .min(6, ({ min }) => `Tamanho mínimo de senha de ${min} caracteres`)
-    .required('Password is required'),
+    .min(6, ({ min }) => `A senha precisa ter no minimo ${min} caracteres`)
+    .required('Preencha sua senha'),
 });
 
 export function SignIn() {
@@ -41,8 +45,14 @@ export function SignIn() {
   const navigation = useNavigation();
 
   async function handleSignIn({ email, password }) {
-    await signIn({ email, password });
-    console.log('VALORES DE', email, password);
+    try {
+      await signIn({ email, password });
+    } catch (err) {
+      Alert.alert(
+        'Erro na autenticação',
+        'Ocorreu um error ao fazer login, verifique suas credenciais e tente novamente.',
+      );
+    }
   }
 
   function handleSigUp() {
@@ -64,15 +74,25 @@ export function SignIn() {
   // }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <KeyboardAvoidingView
-        style={styles.container}
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      >
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <View style={styles.content}>
+    <SafeAreaView style={styles.main}>
+      <StatusBar backgroundColor={colors.purple} />
 
-            {/* <TextInput
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        enabled
+      >
+        <ScrollView contentContainerStyle={{ flex: 1 }}>
+          <View style={{ flex: 1 }}>
+            <Text>
+              MEUSALAO.ONLINE
+            </Text>
+          </View>
+
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <View style={styles.content}>
+
+              {/* <TextInput
                 style={[
                   styles.input,
                   (isFocused || isFilled) && { borderColor: colors.green },
@@ -90,56 +110,69 @@ export function SignIn() {
                 />
               </View> */}
 
-            <View style={styles.form}>
-              <Text style={styles.text}>
-                Realizar login
-              </Text>
-              <Formik
-                validationSchema={loginValidationSchema}
-                initialValues={{
-                  email: '',
-                  password: '',
-                }}
-                onSubmit={(values) => handleSignIn(values)}
-              >
-                {({ handleSubmit, isValid }) => (
-                  <>
-                    <Field
-                      component={Input}
-                      name="email"
-                      placeholder="Digite seu email"
-                      keyboardType="email-address"
-                    />
-                    <Field
-                      component={Input}
-                      name="Digite a sua senha"
-                      placeholder="Password"
-                      secureTextEntry
-                    />
-                    <View style={styles.buttonContainer}>
-                      <Button
-                        onPress={handleSubmit}
-                        title="Entrar"
-                        disabled={!isValid}
+              <View style={styles.form}>
+                <Text style={styles.text}>
+                  Realizar login
+                </Text>
+
+                <Formik
+                  validationSchema={loginValidationSchema}
+                  initialValues={{
+                    email: '',
+                    password: '',
+                  }}
+                  onSubmit={(values) => handleSignIn(values)}
+                >
+                  {({ handleSubmit, isValid }) => (
+                    <>
+                      <Field
+                        component={Input}
+                        name="email"
+                        icon="mail"
+                        placeholder="Digite seu email "
+                        keyboardType="email-address"
+                        autoCapitalize="none"
+                        underlineColorAndroid="transparent"
                       />
-                    </View>
-                  </>
-                )}
-              </Formik>
+                      <Field
+                        component={Input}
+                        name="password"
+                        icon="lock"
+                        placeholder="Digite a sua senha"
+                        secureTextEntry
+                      />
+                      <View style={styles.buttonContainer}>
+                        <Button
+                          onPress={handleSubmit}
+                          title="Entrar"
+                          disabled={!isValid}
+                        />
+                      </View>
+                    </>
+                  )}
+                </Formik>
+              </View>
+
             </View>
-            <TouchableOpacity
-              style={{
-                width: '100%', height: 30, justifyContent: 'center', alignItems: 'center',
-              }}
-              onPress={handleSigUp}
-            >
-              <Text>
-                sdfsd
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </TouchableWithoutFeedback>
+          </TouchableWithoutFeedback>
+        </ScrollView>
       </KeyboardAvoidingView>
+      <View style={{ paddingBottom: 20, backgroundColor: colors.white, width: '100%' }}>
+        <TouchableOpacity
+          style={{
+            width: '100%', height: 30, justifyContent: 'center', alignItems: 'center',
+          }}
+          onPress={handleSigUp}
+        >
+          <Text style={styles.createAccountText}>
+            Novo por aqui?
+            {' '}
+            <Text style={styles.innerCreateAccountText}>
+              Cadastre-se
+            </Text>
+          </Text>
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 }
