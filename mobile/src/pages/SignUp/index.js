@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   View,
   Text,
@@ -8,16 +8,18 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Alert,
+  TouchableOpacity,
+  ScrollView,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Field, Formik } from 'formik';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { Feather as Icon } from '@expo/vector-icons';
 import * as yup from 'yup';
 
-import { useAuth } from '../../contexts/auth';
 import { Button } from '../../components/Button';
 import { Input } from '../../components/Input';
 import { styles } from './styles';
-import colors from '../../styles/colors';
 import api from '../../services/api';
 
 // SignUp.js
@@ -67,33 +69,32 @@ export function SignUp() {
     }
   }
 
-  // function handleInputBlur() {
-  //   setIsFocused(false);
-  //   setIsFilled(!!email);
-  // }
-
-  // function handleInpuFocus() {
-  //   setIsFocused(true);
-  // }
-
-  // function handleInpuChange(value) {
-  //   setIsFilled(!!value);
-  //   setEmail(value);
-  // }
+  function handleSigUp() {
+    navigation.navigate('SignIn');
+  }
 
   return (
     <SafeAreaView style={styles.container}>
-      <KeyboardAvoidingView
-        style={styles.container}
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      >
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <View style={styles.content}>
-            <View style={styles.form}>
-              <Text style={styles.text}>
-                Cadastrar
-              </Text>
 
+      <View style={styles.title}>
+        <TouchableOpacity onPress={handleSigUp}>
+          <Icon name="chevron-left" style={styles.titleIcon} />
+        </TouchableOpacity>
+        <Text style={styles.titleText}>
+          Cadastrar
+        </Text>
+        <Text style={{ paddingHorizontal: 10 }} />
+      </View>
+
+      <KeyboardAvoidingView
+        style={{ flex: 5 }}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        enabled
+      >
+        <ScrollView contentContainerStyle={{ flex: 1 }}>
+
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <View style={styles.form}>
               <Formik
                 validationSchema={signUpValidationSchema}
                 initialValues={{
@@ -110,13 +111,17 @@ export function SignUp() {
                     <Field
                       component={Input}
                       name="name"
-                      placeholder="Full Name"
+                      icon="user"
+                      placeholder="Digite seu nome"
                     />
                     <Field
                       component={Input}
                       name="email"
-                      placeholder="Email Address"
+                      icon="mail"
+                      placeholder="Digite seu email "
                       keyboardType="email-address"
+                      autoCapitalize="none"
+                      underlineColorAndroid="transparent"
                     />
                     {/* <Field
                       component={Input}
@@ -127,22 +132,25 @@ export function SignUp() {
                     <Field
                       component={Input}
                       name="password"
-                      placeholder="Password"
+                      icon="lock"
+                      placeholder="Digite a sua senha"
                       secureTextEntry
                     />
 
-                    <Button
-                      onPress={handleSubmit}
-                      title="Cadastrar"
-                      disabled={!isValid}
-                    />
+                    <View style={styles.buttonContainer}>
+                      <Button
+                        onPress={handleSubmit}
+                        title="Enviar"
+                        disabled={!isValid}
+                      />
+                    </View>
                   </>
                 )}
               </Formik>
 
             </View>
-          </View>
-        </TouchableWithoutFeedback>
+          </TouchableWithoutFeedback>
+        </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );

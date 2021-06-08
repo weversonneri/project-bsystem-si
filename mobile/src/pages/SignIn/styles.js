@@ -5,13 +5,8 @@ import fonts from '../../styles/fonts';
 export const styles = StyleSheet.create({
   main: {
     flex: 1,
-    backgroundColor: colors.purple,
     justifyContent: 'flex-end',
-  },
-  container: {
-    flex: 1,
-    width: '100%',
-
+    backgroundColor: colors.purple,
   },
   content: {
     flex: 3,
@@ -19,7 +14,6 @@ export const styles = StyleSheet.create({
     backgroundColor: colors.white,
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
-
   },
   form: {
     flex: 1,

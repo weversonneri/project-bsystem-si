@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   View,
   Text,
@@ -22,6 +22,7 @@ import { Button } from '../../components/Button';
 import { styles } from './styles';
 import { Input } from '../../components/Input';
 import colors from '../../styles/colors';
+import fonts from '../../styles/fonts';
 
 const loginValidationSchema = yup.object().shape({
   email: yup
@@ -83,8 +84,8 @@ export function SignIn() {
         enabled
       >
         <ScrollView contentContainerStyle={{ flex: 1 }}>
-          <View style={{ flex: 1 }}>
-            <Text>
+          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <Text style={{ color: colors.white, fontFamily: fonts.semiBold, fontSize: 25 }}>
               MEUSALAO.ONLINE
             </Text>
           </View>
