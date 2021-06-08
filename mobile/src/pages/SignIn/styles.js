@@ -8,18 +8,15 @@ export const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     backgroundColor: colors.purple,
   },
-  content: {
-    flex: 3,
-    width: '100%',
-    backgroundColor: colors.white,
+  form: {
+    flex: 2,
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
-  },
-  form: {
-    flex: 1,
+    backgroundColor: colors.white,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     paddingHorizontal: 40,
+    paddingTop: 40,
   },
   text: {
     fontFamily: fonts.semiBold,

@@ -88,7 +88,7 @@ export function SignUp() {
 
       <KeyboardAvoidingView
         style={{ flex: 5 }}
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         enabled
       >
         <ScrollView contentContainerStyle={{ flex: 1 }}>

@@ -15,10 +15,11 @@ const Dashboard = () => {
   const { signOut } = useAuth();
 
   return (
-    <SafeAreaView style={styles.container}>
+    <>
       <KeyboardAvoidingView
-        style={styles.container}
+        style={{ flex: 1 }}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        enabled
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View style={styles.content}>
@@ -27,7 +28,7 @@ const Dashboard = () => {
 
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
-    </SafeAreaView>
+    </>
 
   );
 };

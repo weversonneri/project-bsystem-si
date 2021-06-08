@@ -30,11 +30,11 @@ export const styles = StyleSheet.create({
     color: colors.white,
   },
   form: {
+    flex: 1,
     borderTopLeftRadius: 30,
     backgroundColor: colors.white,
-    flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     paddingHorizontal: 40,
   },
   buttonContainer: {
