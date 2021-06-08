@@ -2,6 +2,7 @@
 'use strict';
 const { Model } = require('sequelize');
 const bcrypt = require('bcryptjs');
+const { url } = require('../../config/config');
 
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
@@ -59,6 +60,12 @@ module.exports = (sequelize, DataTypes) => {
           args: [6],
           msg: 'Tamanho mínimo de senha de seis caracteres',
         },
+      },
+    },
+    url: {
+      type: DataTypes.VIRTUAL,
+      get() {
+        return `${url}/images/${this.getDataValue('avatar')}`;
       },
     },
   }, {

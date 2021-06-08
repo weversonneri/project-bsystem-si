@@ -1,10 +1,10 @@
+const path = require('path');
 const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
 const routes = require('./routes');
 const { sequelize } = require('./app/models/index');
 require('dotenv').config();
-const uploadConfig = require('./config/upload');
 
 const app = express();
 
@@ -15,7 +15,7 @@ app.use(express.urlencoded({ extended: false }));
 
 const PORT = process.env.PORT || 3333;
 
-app.use('/api/files', express.static(uploadConfig.directory));
+app.use('/api/uploads', express.static(path.join(__dirname, '..', 'uploads')));
 app.use('/api', routes);
 
 app.use((req, res, next) => {

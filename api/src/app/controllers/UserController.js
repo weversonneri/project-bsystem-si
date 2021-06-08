@@ -6,7 +6,7 @@ module.exports = {
   async index(req, res) {
     try {
       const users = await User.findAll({
-        attributes: ['id', 'name', 'email'],
+        attributes: ['id', 'name', 'email', 'url', 'avatar'],
         include: {
           model: Scope,
           as: 'scope',
@@ -27,7 +27,7 @@ module.exports = {
 
       const user = await User.findOne({
         where: { id: user_id },
-        attributes: ['id', 'name', 'email', 'scope_id'],
+        attributes: ['id', 'name', 'email', 'scope_id', 'url', 'avatar'],
       });
 
       return res.status(200).json({ error: false, user });

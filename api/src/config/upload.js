@@ -1,7 +1,7 @@
 const multer = require('multer');
 const path = require('path');
 
-const uploadAvatar = path.resolve(__dirname, '..', '..', 'uploads');
+const uploadAvatar = path.resolve(__dirname, '..', '..', 'uploads', 'images');
 
 module.exports = {
   directory: uploadAvatar,
