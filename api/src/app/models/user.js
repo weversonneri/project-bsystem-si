@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
 
       User.hasOne(models.User_token, { foreignKey: 'user_id', as: 'user_token' });
 
-      User.belongsToMany(models.Service, { foreignKey: 'provider_id', through: 'Provider_services', as: 'services' });
+      User.belongsToMany(models.Service, { foreignKey: 'provider_id', through: 'provider_services', as: 'services' });
     }
   }
   User.init({

@@ -1,3 +1,3 @@
 module.exports = {
-  url: 'http://localhost:3333/api/uploads',
+  url: 'http://192.168.1.45:3333/api/uploads',
 };

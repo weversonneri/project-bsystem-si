@@ -9,13 +9,13 @@ module.exports = {
       const { email, password } = req.body;
 
       const user = await User.findOne({
+        attributes: ['id', 'name', 'email', 'password_hash', 'scope_id', 'url', 'avatar'],
         where: { email },
         include: {
           model: Scope,
           as: 'scope',
           attributes: ['name'],
         },
-        raw: true,
         nest: true,
       });
 
@@ -46,6 +46,7 @@ module.exports = {
           id: user.id,
           name: user.name,
           email: user.email,
+          url: user.url,
           scopes: [user.scope.name],
         },
       });
