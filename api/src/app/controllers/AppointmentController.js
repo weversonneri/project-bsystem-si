@@ -14,13 +14,13 @@ module.exports = {
 
   async index(req, res) {
     try {
-      const { page = 1 } = req.query;
+      const { page = 1, limit } = req.query;
       const appointment = await Appointment.findAll({
         attributes: ['id', 'date', 'status'],
         where: { status: 'A' },
         order: ['date'],
-        limit: 10,
-        offset: (page - 1) * 10,
+        limit,
+        offset: (page - 1) * limit,
         include: [{
           model: User,
           as: 'user',
