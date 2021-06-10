@@ -17,6 +17,7 @@ import { styles } from './styles';
 import colors from '../../styles/colors';
 import api from '../../services/api';
 import { AppointmentCard } from '../../components/AppointmentCard';
+import { Load } from '../../components/Load';
 
 export function Dashboard() {
   const [appointment, setAppointment] = useState([]);
@@ -35,6 +36,8 @@ export function Dashboard() {
 
   async function getAppointments() {
     const { data } = await api.get(`/appointments?page=${page}&limit=8`);
+
+    await new Promise((resolve) => setTimeout(resolve, 3000));
 
     if (!data) {
       return setLoading(true);
@@ -62,8 +65,10 @@ export function Dashboard() {
     getAppointments();
   }, []);
 
+  if (loading) return <Load />;
+
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, backgroundColor: colors.background }}>
       <StatusBar backgroundColor={colors.purple} />
 
       <View style={styles.header}>
@@ -75,7 +80,11 @@ export function Dashboard() {
         <View>
           <TouchableOpacity onPress={handleProfile} style={styles.profileImgComponent}>
             <Image
-              source={{ uri: user.url }}
+              source={
+                user.avatar
+                  ? { uri: user.url }
+                  : { uri: `https://ui-avatars.com/api/?name=${user.name}` }
+              }
               style={styles.profileImg}
             />
           </TouchableOpacity>
@@ -93,7 +102,7 @@ export function Dashboard() {
           marginVertical: 20,
         }}
         >
-          Próximas regadas
+          Agendamentos
         </Text>
 
         <FlatList
