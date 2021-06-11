@@ -4,19 +4,60 @@ import fonts from '../../styles/fonts';
 
 export const styles = StyleSheet.create({
   container: {
+    flex: 1,
+    paddingHorizontal: 20,
+    paddingVertical: 3,
+    backgroundColor: colors.white,
+  },
+  cardContainer: {
     width: '100%',
-    paddingHorizontal: 10,
-    paddingVertical: 25,
-    borderRadius: 20,
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: colors.background,
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    borderRadius: 15,
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    backgroundColor: colors.shape,
     marginVertical: 5,
   },
-  title: {
+  appointmentDetail: {
+    flexDirection: 'row',
+    paddingVertical: 15,
+  },
+  appointmentInfo: {
     flex: 1,
     marginLeft: 10,
-    fontFamily: fonts.regular,
-    fontSize: 17,
   },
+  customerImg: {
+    width: 50,
+    height: 50,
+    borderRadius: 40,
+  },
+  date: {
+    color: colors.textNormal,
+    fontWeight: 'bold',
+    flexDirection: 'column',
+  },
+  statusActive: {
+    elevation: 3,
+    paddingHorizontal: 5,
+    borderRadius: 10,
+    backgroundColor: colors.green,
+  },
+  statusActiveText: {
+    color: colors.white,
+    fontSize: 12,
+    fontWeight: 'bold',
+  },
+  statusCanceled: {
+    elevation: 3,
+    paddingHorizontal: 5,
+    borderRadius: 10,
+    backgroundColor: colors.red,
+  },
+  statusCanceledText: {
+    color: colors.white,
+    fontSize: 12,
+    fontWeight: 'bold',
+  },
+
 });

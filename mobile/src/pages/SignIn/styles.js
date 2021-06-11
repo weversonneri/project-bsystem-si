@@ -30,7 +30,7 @@ export const styles = StyleSheet.create({
     width: '100%',
   },
   createAccountText: {
-    color: colors.normaltext,
+    color: colors.textNormal,
   },
   innerCreateAccountText: {
     color: colors.purple,

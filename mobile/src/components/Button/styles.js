@@ -6,7 +6,7 @@ export const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.orange,
     height: 56,
-    borderRadius: 10,
+    borderRadius: 15,
     justifyContent: 'center',
     alignItems: 'center',
   },

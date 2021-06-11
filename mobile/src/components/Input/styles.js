@@ -5,7 +5,7 @@ import fonts from '../../styles/fonts';
 export const styles = StyleSheet.create({
   inputContainer: {
     paddingHorizontal: 10,
-    borderRadius: 10,
+    borderRadius: 15,
     borderWidth: 1,
     borderColor: 'transparent',
     width: '100%',
@@ -16,7 +16,7 @@ export const styles = StyleSheet.create({
   },
   input: {
     fontFamily: fonts.regular,
-    color: colors.normaltext,
+    color: colors.textNormal,
     fontSize: 15,
     padding: 10,
     textAlign: 'left',
@@ -31,6 +31,9 @@ export const styles = StyleSheet.create({
   inputIsFocused: {
     borderWidth: 1,
     borderColor: colors.purple,
+  },
+  iconIsFocused: {
+    color: colors.purple,
   },
   errorText: {
     fontFamily: fonts.regular,

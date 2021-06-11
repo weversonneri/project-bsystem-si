@@ -14,7 +14,8 @@ export const styles = StyleSheet.create({
   // },
 
   header: {
-    padding: 30,
+    paddingHorizontal: 30,
+    paddingVertical: 25,
 
     backgroundColor: colors.purple,
 
@@ -32,7 +33,34 @@ export const styles = StyleSheet.create({
     height: 50,
     borderRadius: 40,
   },
-  headerTitle: {
+  greeting: {
     color: colors.white,
+    fontSize: 20,
   },
+  username: {
+    color: colors.orange,
+    fontFamily: fonts.regular,
+    fontWeight: '700',
+    fontSize: 23,
+  },
+  bodyTitle: {
+    fontFamily: fonts.regular,
+    fontWeight: 'bold',
+    fontSize: 23,
+    color: colors.textTitle,
+
+    paddingVertical: 10,
+    paddingHorizontal: 25,
+  },
+  spotlight: {
+    width: '100%',
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    borderRadius: 15,
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    backgroundColor: colors.shape,
+    marginVertical: 5,
+  },
+
 });
