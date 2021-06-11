@@ -47,6 +47,7 @@ module.exports = {
           name: user.name,
           email: user.email,
           url: user.url,
+          avatar: user.avatar,
           scopes: [user.scope.name],
         },
       });

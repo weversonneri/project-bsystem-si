@@ -17,26 +17,25 @@ module.exports = {
       const { page = 1, limit } = req.query;
       const appointment = await Appointment.findAll({
         attributes: ['id', 'date', 'status'],
-        where: { status: 'A' },
+        // where: { status: 'A' },
         order: ['date'],
         limit,
         offset: (page - 1) * limit,
         include: [{
           model: User,
           as: 'user',
-          attributes: ['id', 'name', 'email'],
+          attributes: ['id', 'name', 'email', 'url', 'avatar'],
         },
         {
           model: User,
           as: 'provider',
-          attributes: ['id', 'name', 'email'],
+          attributes: ['id', 'name', 'email', 'url', 'avatar'],
         },
         {
           model: Service,
           as: 'service',
-          attributes: ['id', 'title'],
+          attributes: ['id', 'title', 'duration', 'description'],
         }],
-        raw: true,
         nest: true,
       });
 
@@ -79,7 +78,7 @@ module.exports = {
         return res.status(401).json({ error: true, message: 'You can only create appointments with providers' });
       }
 
-      if (getHours(appointmentDate) < 8 || getHours(appointmentDate) > 18) {
+      if (getHours(appointmentDate) < 8 || getHours(appointmentDate) > 19) {
         return res.status(401).json({ error: true, message: 'You can only create appointments between 8:00 and 18:00' });
       }
 

@@ -47,6 +47,7 @@ routes.post('/providers/:provider_id/services', authMiddleware, ServiceControlle
 routes.delete('/providers/:provider_id/services', authMiddleware, ServiceController.delete);
 
 routes.get('/schedules', authMiddleware, ScheduleController.index);
+routes.get('/appointments-customer', authMiddleware, ScheduleController.show);
 
 routes.get('/providers/:provider_id/availability', authMiddleware, AvailabilityController.index);
 
