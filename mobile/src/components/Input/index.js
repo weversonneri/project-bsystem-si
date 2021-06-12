@@ -4,7 +4,6 @@ import { Text, TextInput, View } from 'react-native';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { Feather as Icon } from '@expo/vector-icons';
 import { styles } from './styles';
-import colors from '../../styles/colors';
 
 export function Input(props) {
   const [isFocused, setIsFocused] = useState(false);
@@ -38,6 +37,7 @@ export function Input(props) {
           name={icon}
           style={[
             styles.icon,
+            isFocused && styles.iconIsFocused,
             hasError && styles.errorIcon,
             noError && styles.succsessIcon,
           ]}

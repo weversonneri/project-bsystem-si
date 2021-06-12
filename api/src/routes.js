@@ -24,7 +24,7 @@ routes.get('/users/scope', authMiddleware, UserController.scope);
 
 routes.get('/users', authMiddleware, UserController.index);
 routes.get('/users/:user_id', authMiddleware, UserController.show);
-routes.put('/users', authMiddleware, UserController.update);
+routes.put('/profile', authMiddleware, UserController.update);
 routes.delete('/users', authMiddleware, UserController.delete);
 
 routes.patch(

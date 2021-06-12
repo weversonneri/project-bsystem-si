@@ -9,8 +9,13 @@ import {
   StatusBar,
   FlatList,
   ActivityIndicator,
+  Alert,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import {
+  formatDistance, isToday, parseISO,
+} from 'date-fns';
+import { pt } from 'date-fns/locale';
 import { useAuth } from '../../contexts/auth';
 import { styles } from './styles';
 
@@ -18,15 +23,16 @@ import colors from '../../styles/colors';
 import api from '../../services/api';
 import { AppointmentCard } from '../../components/AppointmentCard';
 import { Load } from '../../components/Load';
+import fonts from '../../styles/fonts';
 
 export function Dashboard() {
-  const [appointment, setAppointment] = useState([]);
+  const [appointment, setAppointment] = useState(['']);
   const [loading, setLoading] = useState(true);
 
   const [page, setPage] = useState(1);
   const [loadingMore, setLoadingMore] = useState(false);
 
-  const { signOut, user } = useAuth();
+  const { user } = useAuth();
 
   const navigation = useNavigation();
 
@@ -35,22 +41,26 @@ export function Dashboard() {
   }
 
   async function getAppointments() {
-    const { data } = await api.get(`/appointments?page=${page}&limit=8`);
+    try {
+      const { data } = await api.get(`/schedules/?page=${page}&limit=8`);
+      await new Promise((resolve) => setTimeout(resolve, 3000));
 
-    await new Promise((resolve) => setTimeout(resolve, 3000));
+      if (!data) {
+        return setLoading(true);
+      }
 
-    if (!data) {
-      return setLoading(true);
+      if (page > 1) {
+        setAppointment((oldValue) => [...oldValue, ...data.appointment]);
+      } else {
+        setAppointment(data.appointment);
+      }
+
+      setLoading(false);
+      setLoadingMore(false);
+    } catch (error) {
+      Alert.alert('ERRO');
+      console.log(error);
     }
-
-    if (page > 1) {
-      setAppointment((oldValue) => [...oldValue, ...data.appointment]);
-    } else {
-      setAppointment(data.appointment);
-    }
-
-    setLoading(false);
-    setLoadingMore(false);
   }
 
   function handleGetMoreData(distance) {
@@ -65,18 +75,25 @@ export function Dashboard() {
     getAppointments();
   }, []);
 
+  // const isTodayAppointment = appointment.filter((item) => isToday(parseISO(item.date)));
+
   if (loading) return <Load />;
 
   return (
-    <View style={{ flex: 1, backgroundColor: colors.background }}>
+    <View style={{ flex: 1 }}>
       <StatusBar backgroundColor={colors.purple} />
 
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>
-          Olá,
-          {' '}
-          {user.name}
-        </Text>
+        <View>
+          <Text style={styles.greeting}>
+            Olá,
+          </Text>
+          <Text style={styles.username}>
+            {(user.name).split(' ')[0]}
+            {' '}
+            {(user.name).split(' ')[1] ? (user.name).split(' ')[1] : ''}
+          </Text>
+        </View>
         <View>
           <TouchableOpacity onPress={handleProfile} style={styles.profileImgComponent}>
             <Image
@@ -90,37 +107,45 @@ export function Dashboard() {
           </TouchableOpacity>
         </View>
       </View>
-
       {/* <View style={styles.content}>
           <Button title="SignOut" onPress={signOut} />
         </View> */}
 
-      <View style={{ flex: 1, width: '100%' }}>
-        <Text style={{
-          fontSize: 24,
-          color: colors.heading,
-          marginVertical: 20,
-        }}
-        >
-          Agendamentos
-        </Text>
-
-        <FlatList
-          data={appointment}
-          keyExtractor={(item) => String(item.id)}
-          renderItem={({ item }) => (
-            <AppointmentCard data={item} />
-          )}
-          showsVerticalScrollIndicator={false}
-          onEndReachedThreshold={0.1}
-          onEndReached={({ distanceFromEnd }) => handleGetMoreData(distanceFromEnd)}
-          ListFooterComponent={
-            loadingMore ? <ActivityIndicator color={colors.purple} /> : <></>
-          }
-        />
-
-      </View>
-
+      <FlatList
+        data={appointment}
+        keyExtractor={(item) => String(item.id)}
+        ListHeaderComponent={(
+          <Text style={styles.bodyTitle}>
+            Agendamentos
+          </Text>
+        )}
+        renderItem={({ item }) => (
+          <>
+            {user.scopes[0] === 'USER'
+              ? (
+                <View>
+                  <Text>ok</Text>
+                  <AppointmentCard data={item} />
+                </View>
+              )
+              : <AppointmentCard data={item} />}
+          </>
+        )}
+        showsVerticalScrollIndicator={false}
+        onEndReachedThreshold={0.1}
+        onEndReached={({ distanceFromEnd }) => handleGetMoreData(distanceFromEnd)}
+        ListFooterComponent={
+          loadingMore ? <ActivityIndicator color={colors.purple} /> : <></>
+        }
+        ListEmptyComponent={(
+          <Text
+            style={{ paddingHorizontal: 25, paddingVertical: 10 }}
+          >
+            Você não possui serviço agendado
+          </Text>
+        )}
+        refreshing
+      />
     </View>
 
   );

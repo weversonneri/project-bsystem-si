@@ -69,15 +69,11 @@ export function SignUp() {
     }
   }
 
-  function handleSigUp() {
-    navigation.navigate('SignIn');
-  }
-
   return (
     <SafeAreaView style={styles.container}>
 
       <View style={styles.title}>
-        <TouchableOpacity onPress={handleSigUp}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
           <Icon name="chevron-left" style={styles.titleIcon} />
         </TouchableOpacity>
         <Text style={styles.titleText}>
