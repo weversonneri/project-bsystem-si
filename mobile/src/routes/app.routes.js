@@ -4,6 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { Dashboard } from '../pages/Dashboard';
 import { Profile } from '../pages/Profile';
 import colors from '../styles/colors';
+import TabRoutes from './tab.routes';
 
 const AppStack = createStackNavigator();
 
@@ -19,7 +20,12 @@ const AppRoutes = () => (
 
     <AppStack.Screen
       name="Dashboard"
-      component={Dashboard}
+      component={TabRoutes}
+    />
+
+    <AppStack.Screen
+      name="CreateAppointment"
+      component={TabRoutes}
     />
 
     <AppStack.Screen
