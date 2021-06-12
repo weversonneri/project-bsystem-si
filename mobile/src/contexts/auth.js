@@ -8,7 +8,7 @@ import api from '../services/api';
 const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState();
+  const [data, setData] = useState();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -21,7 +21,7 @@ const AuthProvider = ({ children }) => {
       if (storagedToken && storagedUser) {
         api.defaults.headers.Authorization = `Bearer ${storagedToken}`;
 
-        setUser(JSON.parse(storagedUser));
+        setData(JSON.parse(storagedUser));
       }
       setLoading(false);
     }
@@ -35,21 +35,27 @@ const AuthProvider = ({ children }) => {
       password,
     });
 
-    setUser(response.data.user);
+    setData(response.data.user);
 
     await AsyncStorage.setItem('@Bsys:token', response.data.token);
     await AsyncStorage.setItem('@Bsys:user', JSON.stringify(response.data.user));
   }
 
+  async function updateProfile(user) {
+    await AsyncStorage.setItem('@Bsys:user', JSON.stringify(user));
+
+    setData(user);
+  }
+
   async function signOut() {
     AsyncStorage.clear().then(() => {
-      setUser(null);
+      setData(null);
     });
   }
 
   return (
     <AuthContext.Provider value={{
-      signed: !!user, user, signIn, signOut, loading,
+      signed: !!data, user: data, signIn, signOut, loading, updateProfile,
     }}
     >
       {children}
