@@ -3,6 +3,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import { Dashboard } from '../pages/Dashboard';
 import { Profile } from '../pages/Profile';
+import { ChangePassword } from '../pages/ChangePassword';
+
 import colors from '../styles/colors';
 import TabRoutes from './tab.routes';
 
@@ -32,6 +34,8 @@ const AppRoutes = () => (
       name="Profile"
       component={Profile}
     />
+
+    <AppStack.Screen name="ChangePassword" component={ChangePassword} />
 
   </AppStack.Navigator>
 );
