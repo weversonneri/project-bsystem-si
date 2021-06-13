@@ -1,3 +1,4 @@
+const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { User } = require('../models');
 const { Scope } = require('../models');
@@ -56,9 +57,22 @@ module.exports = {
 
   async update(req, res) {
     try {
-      const user = await User.findByPk(req.userId);
-
       const { body } = req;
+
+      const user = await User.findOne({
+        where: { id: req.userId },
+        include: {
+          model: Scope,
+          as: 'scope',
+          attributes: ['name'],
+        },
+      });
+
+      const compare = await bcrypt.compare(body.oldPassword, user.password_hash);
+
+      if (compare !== true) {
+        return res.status(401).json({ error: true, message: 'Incorrect password' });
+      }
 
       if (body.scope_id !== undefined) {
         return res.status(401).json({ error: true, message: 'Not authorized to change scoope!' });
@@ -68,11 +82,19 @@ module.exports = {
         return res.status(400).json({ error: true, message: 'User not found!' });
       }
 
-      const update = await user.update(req.body);
+      await user.update(req.body);
 
-      const { id, name, email } = update;
-
-      return res.status(200).json({ error: false, user: { id, name, email } });
+      return res.status(200).json({
+        error: false,
+        user: {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          url: user.url,
+          avatar: user.avatar,
+          scopes: [user.scope.name],
+        },
+      });
     } catch (err) {
       return res.status(400).json({ error: true, message: err.message });
     }
