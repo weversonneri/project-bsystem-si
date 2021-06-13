@@ -21,6 +21,9 @@ export const styles = StyleSheet.create({
   goBackButton: {
     fontSize: 25,
     color: colors.textTitle,
+
+    padding: 5,
+    borderRadius: 15,
   },
   headerText: {
     fontFamily: fonts.semiBold,
@@ -30,13 +33,24 @@ export const styles = StyleSheet.create({
   },
   profileImgContainer: {
     marginTop: 10,
+    borderRadius: 90,
+    borderWidth: 1,
+    borderColor: colors.gray,
+    elevation: 3,
   },
   profileImg: {
     width: 110,
     height: 110,
     borderRadius: 90,
-    borderWidth: 1,
-    borderColor: colors.purple,
+  },
+  addphotoIcon: {
+    position: 'absolute',
+    right: 3,
+    bottom: 3,
+    color: colors.white,
+    backgroundColor: colors.orange,
+    padding: 6,
+    borderRadius: 15,
   },
   formTitle: {
     fontSize: 18,
@@ -48,8 +62,32 @@ export const styles = StyleSheet.create({
     paddingTop: 15,
     paddingBottom: 3,
   },
+  input: {
+    paddingVertical: 15,
+    paddingHorizontal: 15,
+    width: '100%',
+
+    borderRadius: 15,
+    borderWidth: 1,
+    borderColor: 'transparent',
+    marginTop: 20,
+
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: colors.background,
+  },
   buttonContainer: {
     marginTop: 40,
     width: '100%',
+  },
+  logoutButton: {
+    paddingVertical: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  logoutButtonText: {
+    fontFamily: fonts.regular,
+    color: colors.red,
   },
 });

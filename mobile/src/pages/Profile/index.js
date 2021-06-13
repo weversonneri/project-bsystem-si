@@ -10,10 +10,13 @@ import {
   KeyboardAvoidingView,
   Platform,
   TouchableOpacity,
+  TextInput,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { RectButton } from 'react-native-gesture-handler';
-import { Feather as Icon } from '@expo/vector-icons';
+import * as ImagePicker from 'expo-image-picker';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { Feather as Icon, MaterialCommunityIcons } from '@expo/vector-icons';
 import { Field, Formik } from 'formik';
 import * as yup from 'yup';
 import { useAuth } from '../../contexts/auth';
@@ -29,10 +32,10 @@ const profileValidationSchema = yup.object().shape({
   name: yup
     .string()
     .required('Full name is required'),
-  email: yup
-    .string()
-    .email('Please enter valid email')
-    .required('Email is required'),
+  // email: yup
+  //   .string()
+  //   .email('Please enter valid email')
+  //   .required('Email is required'),
   // password: yup
   //   .string()
   //   .min(6, ({ min }) => `Password must be at least ${min} characters`)
@@ -66,11 +69,54 @@ export function Profile() {
     }
   }
 
+  async function handleUpdateAvatar() {
+    const { status } = await ImagePicker.requestCameraPermissionsAsync();
+
+    if (status !== 'granted') {
+      Alert.alert('Conceda acesso a galeria de fotos');
+    }
+
+    const result = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      quality: 1,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+    });
+
+    if (result.cancelled) return;
+
+    const { uri: image } = result;
+
+    const data = new FormData();
+
+    data.append('avatar', {
+      type: 'image/jpg',
+      name: `avatar_${user.id}.jpg`,
+      uri: image,
+    });
+
+    try {
+      const response = await api.patch('/users/upload-avatar', data);
+
+      updateProfile(response.data.user);
+
+      Alert.alert(
+        'Foto do perfil atualizado com sucesso!',
+      );
+      navigation.goBack();
+    } catch (err) {
+      Alert.alert(
+        'Erro ao atualizar a foto perfil',
+        err.response.data.message,
+      );
+    }
+  }
+
   return (
     <>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={{ flex: 1 }}
+        keyboardVerticalOffset={10}
         enabled
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -90,7 +136,10 @@ export function Profile() {
                 <Text style={{ paddingHorizontal: 10 }} />
               </View>
 
-              <TouchableOpacity style={styles.profileImgContainer}>
+              <TouchableOpacity
+                onPress={handleUpdateAvatar}
+                style={styles.profileImgContainer}
+              >
                 <Image
                   source={
                     user.avatar
@@ -98,6 +147,11 @@ export function Profile() {
                       : { uri: `https://ui-avatars.com/api/?name=${user.name}` }
                   }
                   style={styles.profileImg}
+                />
+                <MaterialCommunityIcons
+                  name="camera-plus-outline"
+                  size={18}
+                  style={styles.addphotoIcon}
                 />
               </TouchableOpacity>
 
@@ -108,11 +162,9 @@ export function Profile() {
               <Formik
                 validationSchema={profileValidationSchema}
                 initialValues={{
-                  name: '',
-                  email: '',
+                  name: user.name,
+                  email: user.email,
                   // phoneNumber: '',
-                  // password: '',
-                  // confirmPassword: '',
                 }}
                 onSubmit={(values) => handleUpdateProfile(values)}
               >
@@ -134,6 +186,23 @@ export function Profile() {
                       underlineColorAndroid="transparent"
                     />
 
+                    <View
+                      style={styles.input}
+                    >
+                      <Icon name="lock" size={15} color={colors.darkgray} />
+                      <Text style={{ color: colors.darkgray }}>
+                        ********************
+                      </Text>
+                      <TouchableOpacity
+                        onPress={() => navigation.navigate('ChangePassword')}
+                        title="ChangePassword Modal"
+                      >
+                        <Text style={{ color: colors.red }}>
+                          Alterar
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+
                     <View style={styles.buttonContainer}>
                       <Button
                         onPress={handleSubmit}
@@ -145,13 +214,15 @@ export function Profile() {
                 )}
               </Formik>
             </View>
-            <View>
-              <RectButton style={{ width: 50, height: 25, backgroundColor: colors.green }} title="SignOut" onPress={signOut} />
-            </View>
-
+            <TouchableOpacity style={styles.logoutButton} title="Sair" onPress={signOut}>
+              <Text style={styles.logoutButtonText}>
+                Sair do aplicativo
+              </Text>
+            </TouchableOpacity>
           </ScrollView>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
+
     </>
   );
 }
