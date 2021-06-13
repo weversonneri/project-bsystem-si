@@ -68,10 +68,12 @@ module.exports = {
         },
       });
 
-      const compare = await bcrypt.compare(body.oldPassword, user.password_hash);
+      if (body.password) {
+        const compare = await bcrypt.compare(body.oldPassword, user.password_hash);
 
-      if (compare !== true) {
-        return res.status(401).json({ error: true, message: 'Incorrect password' });
+        if (compare !== true) {
+          return res.status(401).json({ error: true, message: 'Incorrect password' });
+        }
       }
 
       if (body.scope_id !== undefined) {
