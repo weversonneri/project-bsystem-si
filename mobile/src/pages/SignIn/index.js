@@ -114,6 +114,11 @@ export function SignIn() {
                   </>
                 )}
               </Formik>
+              <TouchableOpacity style={styles.buttonForgotPassword}>
+                <Text style={{ color: colors.purple }}>
+                  Esqueci minha senha
+                </Text>
+              </TouchableOpacity>
             </View>
           </TouchableWithoutFeedback>
         </ScrollView>

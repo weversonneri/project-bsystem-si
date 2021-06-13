@@ -28,6 +28,9 @@ export const styles = StyleSheet.create({
   buttonContainer: {
     marginTop: 40,
     width: '100%',
+  buttonForgotPassword: {
+    marginTop: 15,
+  },
   },
   createAccountText: {
     color: colors.textNormal,
