@@ -65,8 +65,8 @@ export function SignIn() {
       >
         <ScrollView contentContainerStyle={{ flex: 1 }}>
 
-          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <Text style={{ color: colors.white, fontFamily: fonts.semiBold, fontSize: 25 }}>
+          <View style={styles.headerContainer}>
+            <Text style={styles.headerText}>
               MEUSALAO.ONLINE
             </Text>
           </View>
@@ -123,11 +123,9 @@ export function SignIn() {
           </TouchableWithoutFeedback>
         </ScrollView>
       </KeyboardAvoidingView>
-      <View style={{ paddingVertical: 20, backgroundColor: colors.white, width: '100%' }}>
+      <View style={styles.createAccountTContainer}>
         <TouchableOpacity
-          style={{
-            width: '100%', height: 30, justifyContent: 'center', alignItems: 'center',
-          }}
+          style={styles.createAccountTButton}
           onPress={handleSigUp}
         >
           <Text style={styles.createAccountText}>

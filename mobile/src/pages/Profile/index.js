@@ -26,24 +26,15 @@ import { Input } from '../../components/Input';
 import { styles } from './style';
 import colors from '../../styles/colors';
 import api from '../../services/api';
-import fonts from '../../styles/fonts';
 
 const profileValidationSchema = yup.object().shape({
   name: yup
     .string()
-    .required('Full name is required'),
-  // email: yup
-  //   .string()
-  //   .email('Please enter valid email')
-  //   .required('Email is required'),
-  // password: yup
-  //   .string()
-  //   .min(6, ({ min }) => `Password must be at least ${min} characters`)
-  //   .required('Password is required'),
-  // confirmPassword: yup
-  //   .string()
-  //   .oneOf([yup.ref('password')], 'Passwords do not match')
-  //   .required('Confirm password is required'),
+    .required('Digite seu nome'),
+  email: yup
+    .string()
+    .email('Precisamos de um email válido')
+    .required('Preencha com seu email'),
 });
 
 export function Profile() {

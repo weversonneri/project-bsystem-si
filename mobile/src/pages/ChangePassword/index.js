@@ -27,16 +27,16 @@ const pass = yup.object().shape({
 
   oldPassword: yup
     .string()
-    .min(6, ({ min }) => `Password must be at least ${min} characters`)
-    .required('Password is required'),
+    .min(6, ({ min }) => `A senha precisa ter no minimo ${min} caracteres`)
+    .required('Preencha sua senha'),
   password: yup
     .string()
-    .min(6, ({ min }) => `Password must be at least ${min} characters`)
-    .required('Password is required'),
+    .min(6, ({ min }) => `A senha precisa ter no minimo ${min} caracteres`)
+    .required('Preencha sua senha'),
   confirmPassword: yup
     .string()
-    .oneOf([yup.ref('password')], 'Passwords do not match')
-    .required('Confirm password is required'),
+    .oneOf([yup.ref('password')], 'As senhas não coincidem')
+    .required('Confirme sua senha'),
 });
 
 export function ChangePassword() {
