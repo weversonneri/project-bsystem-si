@@ -59,5 +59,17 @@ export const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: 'bold',
   },
+  buttonRemove: {
+    width: 100,
+    height: 85,
+    backgroundColor: colors.red,
+    marginTop: 15,
+    borderRadius: 15,
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'relative',
+    right: 20,
+    paddingLeft: 15,
+  },
 
 });
