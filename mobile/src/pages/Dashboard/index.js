@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
   View,
-  Button,
-  ScrollView,
   Text,
   Image,
   TouchableOpacity,
@@ -12,10 +10,6 @@ import {
   Alert,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import {
-  formatDistance, isToday, parseISO,
-} from 'date-fns';
-import { pt } from 'date-fns/locale';
 import { useAuth } from '../../contexts/auth';
 import { styles } from './styles';
 
@@ -23,7 +17,6 @@ import colors from '../../styles/colors';
 import api from '../../services/api';
 import { AppointmentCard } from '../../components/AppointmentCard';
 import { Load } from '../../components/Load';
-import fonts from '../../styles/fonts';
 
 export function Dashboard() {
   const [appointment, setAppointment] = useState(['']);
@@ -32,7 +25,7 @@ export function Dashboard() {
   const [page, setPage] = useState(1);
   const [loadingMore, setLoadingMore] = useState(false);
 
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
 
   const navigation = useNavigation();
 
@@ -57,9 +50,18 @@ export function Dashboard() {
 
       setLoading(false);
       setLoadingMore(false);
-    } catch (error) {
+    } catch (err) {
+      if (err.response.data.message === 'Invalid or expired token.') {
+        Alert.alert(
+          'Sessão expirada',
+          'Realize o login novamente',
+          [
+            { text: 'OK', onPress: signOut },
+          ],
+        );
+      }
       Alert.alert('ERRO');
-      console.log(error);
+      console.log(err.response.data.message);
     }
   }
 
@@ -89,9 +91,9 @@ export function Dashboard() {
             Olá,
           </Text>
           <Text style={styles.username}>
-            {(user.name).split(' ')[0]}
-            {' '}
-            {(user.name).split(' ')[1] ? (user.name).split(' ')[1] : ''}
+            {user.name.length < 17
+              ? `${user.name}`
+              : `${user.name.substring(0, 15)}...`}
           </Text>
         </View>
         <View>

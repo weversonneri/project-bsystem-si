@@ -1,11 +1,16 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
+  Alert,
   FlatList,
   Image, Text, TouchableOpacity, View,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../../contexts/auth';
 import { styles } from './styles';
+import { Load } from '../../components/Load';
+import { ServiceCard } from '../../components/ServiceCard';
+
+import api from '../../services/api';
 
 const DATA = [
   {
@@ -26,9 +31,40 @@ const DATA = [
 ];
 
 export function CreateAppointment() {
+  const [services, setServices] = useState();
+  const [loading, setLoading] = useState(true);
+
   const { user } = useAuth();
 
   const navigation = useNavigation();
+
+  useEffect(() => {
+    async function getServices() {
+      try {
+        const { data } = await api.get('/services');
+        // await new Promise((resolve) => setTimeout(resolve, 3000));
+
+        if (!data) {
+          return setLoading(true);
+        }
+
+        // if (page > 1) {
+        //   setAppointment((oldValue) => [...oldValue, ...data.appointment]);
+        // } else {
+        //   setAppointment(data.appointment);
+        // }
+        setServices(data.services);
+        setLoading(false);
+        // setLoadingMore(false);
+      } catch (error) {
+        Alert.alert('ERRO');
+        console.log(error);
+      }
+    }
+    getServices();
+  }, []);
+
+  if (loading) return <Load />;
 
   return (
     <View style={styles.container}>
@@ -54,21 +90,15 @@ export function CreateAppointment() {
       <View />
 
       <FlatList
-        data={DATA}
+        data={services}
         keyExtractor={(item) => String(item.id)}
         ListHeaderComponent={(
-          <Text style={styles.bodyTitle}>
+          <Text style={styles.flatListTitle}>
             Serviços
           </Text>
         )}
         renderItem={({ item }) => (
-          <>
-            <View>
-              <Text>{item.title}</Text>
-              <Text>{item.duration}</Text>
-            </View>
-
-          </>
+          <ServiceCard data={item} onPress={() => navigation.navigate('ConfirmAppointment', { item })} />
         )}
         showsVerticalScrollIndicator={false}
         ListEmptyComponent={(

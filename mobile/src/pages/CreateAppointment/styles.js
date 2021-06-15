@@ -6,6 +6,7 @@ export const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: '100%',
+    backgroundColor: colors.white,
   },
   header: {
     paddingHorizontal: 30,
@@ -32,6 +33,14 @@ export const styles = StyleSheet.create({
     fontFamily: fonts.regular,
     fontWeight: '700',
     fontSize: 23,
+  },
+  flatListTitle: {
+    fontFamily: fonts.semiBold,
+    fontSize: 20,
+    color: colors.textTitle,
+
+    paddingVertical: 10,
+    paddingHorizontal: 30,
   },
 
 });

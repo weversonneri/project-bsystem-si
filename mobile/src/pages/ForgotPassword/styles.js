@@ -17,7 +17,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   goBackButton: {
-    fontSize: 25,
+    fontSize: 20,
     color: colors.textTitle,
 
     padding: 5,
