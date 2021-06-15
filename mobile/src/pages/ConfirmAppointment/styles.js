@@ -20,6 +20,7 @@ export const styles = StyleSheet.create({
     fontSize: 20,
     color: colors.textTitle,
 
+    padding: 10,
     borderRadius: 15,
   },
   headerText: {
@@ -105,6 +106,7 @@ export const styles = StyleSheet.create({
   modalTitle: {
     fontFamily: fonts.semiBold,
     fontSize: 16,
+    alignSelf: 'center',
   },
   dateContainer: {
     backgroundColor: colors.shape,
@@ -147,13 +149,42 @@ export const styles = StyleSheet.create({
   dayName: {
     fontFamily: fonts.regular,
     fontSize: 12,
-    color: colors.textNormal,
-
   },
   dayNumber: {
     fontFamily: fonts.regular,
     fontSize: 16,
     fontWeight: 'bold',
+  },
+
+  hourContainer: {
+    backgroundColor: colors.shape,
+    padding: 10,
+    borderRadius: 15,
+    marginTop: 30,
+  },
+  hourList: {
+    paddingVertical: 3,
+  },
+  hour: {
+    width: 70,
+    height: 35,
+    alignItems: 'center',
+    justifyContent: 'center',
+
+    margin: 3,
+    backgroundColor: colors.white,
+
+    paddingVertical: 6,
+    borderRadius: 7,
+  },
+  hourNumber: {
+    fontFamily: fonts.semiBold,
     color: colors.textTitle,
+  },
+  emptyData: {
+    fontFamily: fonts.regular,
+    color: colors.textNormal,
+    paddingVertical: 30,
+    alignSelf: 'center',
   },
 });
