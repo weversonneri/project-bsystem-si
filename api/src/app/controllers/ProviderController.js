@@ -3,10 +3,27 @@ const { Service } = require('../models');
 // const { Scope } = require('../models');
 
 module.exports = {
+  // async index(req, res) {
+  //   try {
+  //     const providers = await User.findAll({
+  //       attributes: ['id', 'name', 'email', 'url', 'avatar'],
+  //       where: {
+  //         scope_id: 2,
+  //       },
+  //       nest: true,
+  //     });
+  //     return res.status(200).json({ error: false, providers });
+  //   } catch (err) {
+  //     return res.status(400).json({ error: true, message: err.message });
+  //   }
+  // },
+
   async index(req, res) {
     try {
+      const { service } = req.query;
+
       const providers = await User.findAll({
-        attributes: ['id', 'name', 'email'],
+        attributes: ['id', 'name', 'email', 'url', 'avatar'],
         where: {
           scope_id: 2,
         },
@@ -18,8 +35,10 @@ module.exports = {
             through: {
               attributes: [],
             },
+            where: {
+              id: service,
+            },
           }],
-        raw: true,
         nest: true,
       });
       return res.status(200).json({ error: false, providers });

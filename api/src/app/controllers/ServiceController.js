@@ -5,21 +5,36 @@ const { User } = require('../models');
 module.exports = {
   async index(req, res) {
     try {
-      const service = await Service.findAll();
+      const services = await Service.findAll({
+        attributes: ['id', 'title'],
+        // include: [
+        //   {
+        //     model: User,
+        //     as: 'providers',
+        //     attributes: ['id', 'name', 'email', 'url', 'avatar'],
+        //     through: {
+        //       attributes: [],
+        //     },
+        //     where: {
+        //       scope_id: 2,
+        //     },
+        //   }],
+        nest: true,
+      });
 
-      return res.status(200).json({ error: false, service });
+      return res.status(200).json({ error: false, services });
     } catch (err) {
       return res.status(400).json({ error: true, message: err.message });
     }
   },
 
-  async show(req, res) {
-    try {
-      return res.status(200).json();
-    } catch (err) {
-      return res.status(400).json({ error: true, message: err.message });
-    }
-  },
+  // async show(req, res) {
+  //   try {
+  //     return res.status(200).json();
+  //   } catch (err) {
+  //     return res.status(400).json({ error: true, message: err.message });
+  //   }
+  // },
 
   async store(req, res) {
     try {

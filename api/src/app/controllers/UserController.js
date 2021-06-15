@@ -13,7 +13,6 @@ module.exports = {
           as: 'scope',
           attributes: ['name'],
         },
-        raw: true,
         nest: true,
       });
       return res.status(200).json({ error: false, users });

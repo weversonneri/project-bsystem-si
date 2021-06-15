@@ -42,6 +42,7 @@ routes.get('/appointments', authMiddleware, AppointmentController.show);
 routes.post('/appointments', authMiddleware, AppointmentController.store);
 routes.delete('/appointments/:appointment_id', authMiddleware, AppointmentController.delete);
 
+routes.get('/services', authMiddleware, ServiceController.index);
 // routes.get('/providers/:provider_id/services', authMiddleware, ServiceController.index);
 routes.post('/providers/:provider_id/services', authMiddleware, ServiceController.store);
 routes.delete('/providers/:provider_id/services', authMiddleware, ServiceController.delete);
