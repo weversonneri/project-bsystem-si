@@ -3,6 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import { Dashboard } from '../pages/Dashboard';
 import { Profile } from '../pages/Profile';
+import { ConfirmAppointment } from '../pages/ConfirmAppointment';
 import { ChangePassword } from '../pages/ChangePassword';
 
 import colors from '../styles/colors';
@@ -33,6 +34,11 @@ const AppRoutes = () => (
     <AppStack.Screen
       name="Profile"
       component={Profile}
+    />
+
+    <AppStack.Screen
+      name="ConfirmAppointment"
+      component={ConfirmAppointment}
     />
 
     <AppStack.Screen name="ChangePassword" component={ChangePassword} />

@@ -19,7 +19,7 @@ const TabRoutes = () => (
       labelPosition: 'beside-icon',
       style: {
         paddingVertical: Platform.OS === 'ios' ? 20 : 0,
-        height: 78,
+        height: 70,
       },
     }}
   >
