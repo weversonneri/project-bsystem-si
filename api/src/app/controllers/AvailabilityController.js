@@ -36,9 +36,9 @@ module.exports = {
       }
 
       // const searchDate = Number(date);
-      const searchDate = startOfHour(parseISO(date));
+      const parseDate = new Date(date).toISOString();
+      const searchDate = startOfHour(parseISO(parseDate));
 
-      console.log(searchDate);
       // 2021-05-15 10:49:44
 
       const appointments = await Appointment.findAll({
@@ -83,7 +83,6 @@ module.exports = {
 
       return res.status(200).json({ error: false, available });
     } catch (err) {
-      // console.log(error);
       return res.status(400).json({ error: true, message: err.message });
     }
   },

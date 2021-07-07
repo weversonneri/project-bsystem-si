@@ -47,6 +47,11 @@ module.exports = {
           attributes: ['id', 'name', 'email', 'url', 'avatar'],
         },
         {
+          model: User,
+          as: 'provider',
+          attributes: ['id', 'name', 'email', 'url', 'avatar'],
+        },
+        {
           model: Service,
           as: 'service',
           attributes: ['id', 'title', 'duration', 'description'],
@@ -56,7 +61,6 @@ module.exports = {
 
       return res.status(200).json({ error: false, appointment });
     } catch (err) {
-      // console.log(error);
       return res.status(400).json({ error: true, message: err.message });
     }
   },
@@ -92,7 +96,6 @@ module.exports = {
 
       return res.status(200).json({ error: false, appointment });
     } catch (err) {
-      // console.log(error);
       return res.status(400).json({ error: true, message: err.message });
     }
   },

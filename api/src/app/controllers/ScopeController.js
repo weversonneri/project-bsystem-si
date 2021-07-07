@@ -16,7 +16,6 @@ module.exports = {
       });
       return res.status(200).json(users);
     } catch (err) {
-      console.log(err);
       return res.status(400).json({ error: true, message: err.message });
     }
   },
@@ -44,11 +43,8 @@ module.exports = {
 
       const { name, email, scope_id } = user;
 
-      console.log({ name, email, scope_id });
       return res.status(201).json({ name, email, scope_id });
     } catch (err) {
-      console.log(err);
-
       return res.status(403).json({ error: true, message: err.message });
     }
   },

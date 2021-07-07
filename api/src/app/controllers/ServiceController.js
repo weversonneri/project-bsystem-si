@@ -6,7 +6,7 @@ module.exports = {
   async index(req, res) {
     try {
       const services = await Service.findAll({
-        attributes: ['id', 'title'],
+        attributes: ['id', 'title', 'description', 'duration'],
         // include: [
         //   {
         //     model: User,
@@ -39,7 +39,7 @@ module.exports = {
   async store(req, res) {
     try {
       const { provider_id } = req.params;
-      const { title, duration } = req.body;
+      const { title, duration, description } = req.body;
 
       const provider = await User.findByPk(provider_id);
 
@@ -52,15 +52,13 @@ module.exports = {
       }
 
       const [service] = await Service.findOrCreate({
-        where: { title, duration },
+        where: { title, duration, description },
       });
 
       await provider.addService(service);
 
       return res.status(201).json(service);
     } catch (err) {
-      console.log(err);
-
       return res.status(403).json({ error: true, message: err.message });
     }
   },
