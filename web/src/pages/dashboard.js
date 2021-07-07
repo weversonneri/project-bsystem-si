@@ -9,7 +9,7 @@ function Dashboard() {
 
   useEffect(() => {
     (async () => {
-      const { data } = await api.get('/api/users');
+      const { data } = await api.get('/users');
       setUsers(data.users);
     })();
   }, []);

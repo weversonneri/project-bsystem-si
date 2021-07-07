@@ -1,6 +1,5 @@
 import React, {
   createContext,
-  useCallback,
   useContext,
   useState,
 } from 'react';
@@ -12,15 +11,22 @@ import api from '../services/api';
 const AuthContext = createContext();
 
 function AuthProvider({ children }) {
-  // const [permission, setPermission] = useState('');
-
   const [data, setData] = useState(() => {
-    const token = localStorage.getItem('@Bsys:token');
+    const storagedToken = localStorage.getItem('@Bsys:token');
+    const storagedUser = localStorage.getItem('@Bsys:user');
 
-    if (token) {
-      api.defaults.headers.Authorization = `Bearer ${JSON.parse(token)}`;
+    if (storagedToken && storagedUser) {
+      api.defaults.headers.Authorization = `Bearer ${JSON.parse(storagedToken)}`;
 
-      return { token };
+      // const isExpired = jwt_decode(storagedToken);
+      // if (isExpired.exp < new Date().getTime()) {
+      //   console.log('Sua sessaõ expirou', 'Realize o login novamente');
+      //   // signOut();
+      // }
+
+      const user = JSON.parse(storagedToken);
+
+      return { user };
     }
     return {};
   });
@@ -39,33 +45,25 @@ function AuthProvider({ children }) {
   //   setLoading(false);
   // }, []);
 
-  const handleSignIn = useCallback(async ({ email, password }) => {
-    const response = await api.post('/api/auth', {
-      email,
-      password,
-    }).catch((error) => {
-      if (error.response) {
-        console.log(error.response.data);
-      } else {
-        // Something happened in setting up the request that triggered an
-        console.log('Error', error.message);
-      }
-      return error;
-    });
+  async function handleSignIn({ email, password }) {
+    try {
+      const response = await api.post('/auth', {
+        email,
+        password,
+      });
 
-    console.log(response.data);
+      setData(response.data.user);
 
-    const { token, user } = response.data;
+      api.defaults.headers.Authorization = `Bearer ${response.data.token}`;
 
-    setData(token);
+      localStorage.setItem('@Bsys:token', JSON.stringify(response.data.token));
+      localStorage.setItem('@Bsys:user', JSON.stringify(response.data.user));
 
-    console.log(token, user);
-
-    localStorage.setItem('@Bsys:token', JSON.stringify(token));
-    localStorage.setItem('@Bsys:user', JSON.stringify(user));
-
-    history.push('/dashboard');
-  }, []);
+      history.push('/dashboard');
+    } catch (err) {
+      console.error(err.response.data);
+    }
+  }
 
   const isAuthenticated = () => {
     const token = localStorage.getItem('@Bsys:token');
@@ -98,11 +96,6 @@ function AuthProvider({ children }) {
   );
 }
 
-// const useAuth = () => useContext(AuthContext);
-
-const useAuth = () => {
-  const context = useContext(AuthContext);
-  return context;
-};
+const useAuth = () => useContext(AuthContext);
 
 export { useAuth, AuthProvider };

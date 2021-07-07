@@ -10,7 +10,7 @@ function Login() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    await handleSignIn({ email, password });
+    handleSignIn({ email, password });
   };
 
   return (
