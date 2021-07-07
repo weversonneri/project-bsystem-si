@@ -2,6 +2,8 @@ const { isAfter, addHours } = require('date-fns');
 const { User_token } = require('../models');
 const { User } = require('../models');
 const MailTrap = require('../../config/mail/Mailtrap');
+const SESMail = require('../../config/mail/SESMail');
+const mailConfig = require('../../config/mail/mail');
 
 module.exports = {
   async store(req, res) {
@@ -22,6 +24,23 @@ module.exports = {
 
       const token = await User_token.create({ user_id: user.id });
 
+      if (mailConfig.driver === 'ses') {
+        await SESMail.sendMail({
+          to: {
+            name: user.name,
+            email: user.email,
+          },
+          subject: '[MEUSALAO.ONLINE] Recuperação de senha.',
+          template: 'forgot_password',
+          context: {
+            name: user.name,
+            token: `${process.env.RESET_PASSWORD_HOST}?token=${token.password_reset_token}`,
+          },
+        });
+
+        return res.status(200).json();
+      }
+
       await MailTrap.sendMail({
         to: {
           name: user.name,
@@ -31,11 +50,11 @@ module.exports = {
         template: 'forgot_password',
         context: {
           name: user.name,
-          token: `http://localhost:3333/api/reset-password?token=${token.password_reset_token}`,
+          token: `${process.env.RESET_PASSWORD_HOST}?token=${token.password_reset_token}`,
         },
       });
 
-      return res.status(201).json({ error: false, token });
+      return res.status(200).json();
     } catch (err) {
       return res.status(403).json({ error: true, message: err.message });
     }
@@ -43,7 +62,8 @@ module.exports = {
 
   async update(req, res) {
     try {
-      const { new_password, token } = req.body;
+      const { new_password } = req.body;
+      const { token } = req.query;
 
       const userToken = await User_token.findOne({
         where: {

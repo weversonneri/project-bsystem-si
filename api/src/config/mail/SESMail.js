@@ -2,6 +2,8 @@ const nodemailer = require('nodemailer');
 const exphbs = require('express-handlebars');
 const nodemailerhbs = require('nodemailer-express-handlebars');
 const path = require('path');
+const aws = require('aws-sdk');
+const mailConfig = require('./mail');
 
 module.exports = {
   async sendMail({
@@ -12,12 +14,9 @@ module.exports = {
   }) {
     // create reusable transporter object using the default SMTP transport
     const transporter = nodemailer.createTransport({
-      host: 'smtp.mailtrap.io',
-      port: 2525,
-      auth: {
-        user: 'e285b9aa54bbfc',
-        pass: '841642e6a883c6',
-      },
+      SES: new aws.SES({
+        apiVersion: '2010-12-01',
+      }),
     });
 
     const viewPath = path.resolve(__dirname, '..', '..', 'app', 'views');
@@ -36,9 +35,14 @@ module.exports = {
       }),
     );
 
+    const { email, name } = mailConfig.defaults.from;
+
     // send mail with defined transport object
-    const info = await transporter.sendMail({
-      from: 'test@test.com',
+    await transporter.sendMail({
+      from: {
+        name,
+        address: email,
+      },
       to: {
         name: to.name,
         address: to.email,
@@ -47,8 +51,5 @@ module.exports = {
       template,
       context,
     });
-
-    console.log('Message sent: %s', info.messageId);
-    console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
   },
 };
