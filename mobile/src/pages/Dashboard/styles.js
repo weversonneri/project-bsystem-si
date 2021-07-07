@@ -3,16 +3,10 @@ import colors from '../../styles/colors';
 import fonts from '../../styles/fonts';
 
 export const styles = StyleSheet.create({
-  // container: {
-  //   flex: 1,
-  //   width: '100%',
-  // },
-  // content: {
-  //   flex: 1,
-  //   width: '100%',
-  //   justifyContent: 'center',
-  // },
-
+  container: {
+    flex: 1,
+    backgroundColor: colors.purple,
+  },
   header: {
     paddingHorizontal: 30,
     paddingVertical: 25,
@@ -41,13 +35,13 @@ export const styles = StyleSheet.create({
     color: colors.orange,
     fontFamily: fonts.regular,
     fontWeight: '700',
-    fontSize: 23,
+    fontSize: 22,
   },
   bodyTitle: {
     fontFamily: fonts.regular,
     fontWeight: 'bold',
-    fontSize: 23,
-    color: colors.textTitle,
+    fontSize: 20,
+    color: colors.textNormal,
 
     paddingVertical: 10,
     paddingHorizontal: 25,
@@ -61,6 +55,10 @@ export const styles = StyleSheet.create({
     alignItems: 'flex-start',
     backgroundColor: colors.shape,
     marginVertical: 5,
+  },
+  flatList: {
+    backgroundColor: colors.white,
+    borderTopLeftRadius: 30,
   },
 
 });
