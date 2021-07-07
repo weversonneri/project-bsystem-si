@@ -21,7 +21,6 @@ import { Button } from '../../components/Button';
 import { styles } from './styles';
 import { Input } from '../../components/Input';
 import colors from '../../styles/colors';
-import fonts from '../../styles/fonts';
 
 const loginValidationSchema = yup.object().shape({
   email: yup
@@ -47,6 +46,7 @@ export function SignIn() {
         'Erro na autenticação',
         'Ocorreu um error ao fazer login, verifique suas credenciais e tente novamente.',
       );
+      console.log(err.response.data);
     }
   }
 

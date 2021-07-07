@@ -12,24 +12,6 @@ import { ServiceCard } from '../../components/ServiceCard';
 
 import api from '../../services/api';
 
-const DATA = [
-  {
-    id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-    title: 'First Item',
-    duration: '30',
-  },
-  {
-    id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-    title: 'Second Item',
-    duration: '30',
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-145571e29d72',
-    title: 'Third Item',
-    duration: '30',
-  },
-];
-
 export function CreateAppointment() {
   const [services, setServices] = useState();
   const [loading, setLoading] = useState(true);
@@ -58,7 +40,7 @@ export function CreateAppointment() {
         // setLoadingMore(false);
       } catch (error) {
         Alert.alert('ERRO');
-        console.log(error);
+        console.log(error.response.data);
       }
     }
     getServices();
@@ -71,7 +53,7 @@ export function CreateAppointment() {
       <View style={styles.header}>
         <View>
           <Text style={styles.title}>
-            Agendamento
+            Serviços
           </Text>
         </View>
         <View>
@@ -90,13 +72,9 @@ export function CreateAppointment() {
       <View />
 
       <FlatList
+        style={styles.flatList}
         data={services}
         keyExtractor={(item) => String(item.id)}
-        ListHeaderComponent={(
-          <Text style={styles.flatListTitle}>
-            Serviços
-          </Text>
-        )}
         renderItem={({ item }) => (
           <ServiceCard data={item} onPress={() => navigation.navigate('ConfirmAppointment', { item })} />
         )}
@@ -105,7 +83,7 @@ export function CreateAppointment() {
           <Text
             style={{ paddingHorizontal: 25, paddingVertical: 10 }}
           >
-            Nenhum serviço cadastrado
+            Nenhum serviço encontrado
           </Text>
         )}
         refreshing

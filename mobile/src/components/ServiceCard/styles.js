@@ -5,7 +5,8 @@ import fonts from '../../styles/fonts';
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 5,
+    paddingHorizontal: 8,
+
   },
   cardContainer: {
     width: '100%',
@@ -26,11 +27,6 @@ export const styles = StyleSheet.create({
     flexShrink: 1,
     marginHorizontal: 5,
   },
-  serviceImg: {
-    width: 60,
-    height: 60,
-    borderRadius: 10,
-  },
   buttonSubmit: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -44,9 +40,11 @@ export const styles = StyleSheet.create({
   },
   buttonSubmitText: {
     fontFamily: fonts.regular,
+    fontSize: 13,
     color: colors.white,
   },
   buttonSubmitIcon: {
+    fontSize: 12,
     paddingRight: 5,
     color: colors.white,
   },

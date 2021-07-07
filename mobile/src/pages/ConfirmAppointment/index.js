@@ -5,8 +5,6 @@ import {
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { RectButton } from 'react-native-gesture-handler';
 
-import * as yup from 'yup';
-
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { Feather as Icon } from '@expo/vector-icons';
 import {
@@ -31,6 +29,8 @@ export function ConfirmAppointment() {
   const [selectedProvider, setSelectedProvider] = useState();
   const [modalVisible, setModalVisible] = useState(false);
   const [loading, setLoading] = useState(true);
+
+  const [loadingHour, setLoadingHour] = useState(false);
 
   const [selectedYear, setSelectedYear] = useState(0);
   const [selectedMonth, setSelectedMonth] = useState(0);
@@ -83,7 +83,7 @@ export function ConfirmAppointment() {
 
         Alert.alert(
           'Agendamento realizado com sucesso',
-          '...',
+          'Seu agendamento foi confirmado',
         );
         navigation.navigate('Dashboard');
       } catch (err) {
@@ -150,6 +150,7 @@ export function ConfirmAppointment() {
           return;
         }
         if (selectedDay > 0) {
+          setLoadingHour(true);
           const { data } = await api.get(`/providers/${selectedProvider.id}/availability`, {
             params: {
               date: `${selectedYear}-0${selectedMonth + 1}-${selectedDay}`,
@@ -164,6 +165,7 @@ export function ConfirmAppointment() {
 
           setListHours(data.available);
           setLoading(false);
+          setLoadingHour(false);
 
           setSelectedHour(null);
         }
@@ -215,7 +217,12 @@ export function ConfirmAppointment() {
         <View style={styles.container}>
           <View style={styles.confirmService}>
             <Text style={styles.confirmServiceText}>
-              {route.params.item.title}
+              {route.params.item.title.length < 24
+                ? `${route.params.item.title}`
+                : `${route.params.item.title.substring(0, 22)}...`}
+            </Text>
+            <Text style={styles.confirmServiceText}>
+              {route.params.item.description}
             </Text>
           </View>
 
@@ -251,9 +258,7 @@ export function ConfirmAppointment() {
                 onPress={() => setModalVisible(!modalVisible)}
                 style={styles.providerSelectButton}
               >
-                <Text style={styles.providerSelectButtonText}>
-                  Selecionar
-                </Text>
+                <Icon name="chevron-down" style={styles.providerSelectIcon} />
               </TouchableOpacity>
             </View>
           </View>
@@ -286,6 +291,7 @@ export function ConfirmAppointment() {
               horizontal
               snapToAlignment={selectedDay}
               style={styles.dayContainer}
+              showsHorizontalScrollIndicator={false}
             >
               {listDays.map((item, key) => (
                 <TouchableOpacity
@@ -323,16 +329,19 @@ export function ConfirmAppointment() {
             </ScrollView>
           </View>
 
-          {listHours.length < 1
-            && <Text style={styles.emptyData}>Selecione o profissional e a data</Text>}
+          {loadingHour ? <Text style={styles.emptyData}>Carregando horários...</Text>
+            : listHours.length < 1
+            && (<Text style={styles.emptyData}>Selecione o profissional e a data</Text>)}
 
-          {listHours.length > 0
+          {(listHours.length > 0 && !loadingHour)
             && (
               <View style={styles.hourContainer}>
                 <ScrollView
                   horizontal
                   snapToAlignment={selectedHour}
                   style={styles.hourList}
+                  showsHorizontalScrollIndicator={false}
+
                 >
                   {listHours.map((item, key) => (
                     <TouchableOpacity
@@ -383,16 +392,18 @@ export function ConfirmAppointment() {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <TouchableOpacity
-              onPress={() => setModalVisible(!modalVisible)}
-            >
-              <Icon name="x" style={styles.modalIcon} />
-            </TouchableOpacity>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <TouchableOpacity
+                onPress={() => setModalVisible(!modalVisible)}
+              >
+                <Icon name="x" style={styles.modalIcon} />
+              </TouchableOpacity>
 
-            <View>
-              <Text style={styles.modalTitle}>
-                Selecione um profissional
-              </Text>
+              <View>
+                <Text style={styles.modalTitle}>
+                  Selecione um profissional
+                </Text>
+              </View>
             </View>
 
             <View style={{ marginTop: 10 }}>

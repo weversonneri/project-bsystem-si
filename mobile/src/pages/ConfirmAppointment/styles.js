@@ -31,7 +31,9 @@ export const styles = StyleSheet.create({
   },
   confirmService: {
     paddingHorizontal: 15,
-    paddingVertical: 10,
+    paddingVertical: 15,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
 
     backgroundColor: colors.shape,
 
@@ -40,7 +42,7 @@ export const styles = StyleSheet.create({
   confirmServiceText: {
     color: colors.textNormal,
     fontFamily: fonts.semiBold,
-    fontSize: 14,
+    fontSize: 15,
   },
   providerContainer: {
     borderRadius: 15,
@@ -50,7 +52,7 @@ export const styles = StyleSheet.create({
   providertitle: {
     fontSize: 16,
     fontWeight: '700',
-    color: colors.textTitle,
+    color: colors.textNormal,
   },
   providerDetails: {
     flexDirection: 'row',
@@ -74,15 +76,14 @@ export const styles = StyleSheet.create({
   providerSelectButton: {
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 15,
+    borderRadius: 10,
 
-    backgroundColor: colors.green,
-    paddingHorizontal: 10,
+    backgroundColor: colors.purple,
+    padding: 8,
   },
-  providerSelectButtonText: {
+  providerSelectIcon: {
+    fontSize: 15,
     color: colors.white,
-    fontFamily: fonts.regular,
-    fontSize: 12,
   },
   centeredView: {
     flex: 1,
@@ -101,12 +102,13 @@ export const styles = StyleSheet.create({
   modalIcon: {
     fontSize: 18,
     color: colors.darkgray,
-    marginBottom: 10,
   },
   modalTitle: {
     fontFamily: fonts.semiBold,
     fontSize: 16,
     alignSelf: 'center',
+    marginLeft: 20,
+
   },
   dateContainer: {
     backgroundColor: colors.shape,

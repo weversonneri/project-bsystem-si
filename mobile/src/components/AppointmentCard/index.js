@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import { format, parseISO } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import React from 'react';
@@ -9,12 +10,13 @@ import Animated from 'react-native-reanimated';
 import { styles } from './styles';
 import colors from '../../styles/colors';
 import fonts from '../../styles/fonts';
+import { useAuth } from '../../contexts/auth';
 
 export function AppointmentCard({ data, handleRemove, ...rest }) {
+  const { user } = useAuth();
+
   const formatHour = format(parseISO(data.date), 'HH:mm');
   const formatDay = format(parseISO(data.date), 'PP', { locale: ptBR });
-
-  const formatedName = `${(data.user.name).split(' ')[0]} ${(data.user.name).split(' ')[1] ? (data.user.name).split(' ')[1] : ''}`;
 
   return (
     <Swipeable
@@ -39,62 +41,57 @@ export function AppointmentCard({ data, handleRemove, ...rest }) {
           // eslint-disable-next-line react/jsx-props-no-spreading
           {...rest}
         >
-          { }
-          <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between' }}>
-            <View style={{ flexDirection: 'column' }}>
-              <Text style={{
-                fontSize: 10, paddingBottom: 3, color: colors.darkgray, fontWeight: '500',
-              }}
-              >
-                Data do Agendamento
-              </Text>
-              {/* <Icon name="clock" size={10} /> */}
-              <Text style={styles.date}>
-                {formatDay}
-                {' - '}
-                {formatHour}
-                {' '}
-                hs
-              </Text>
-            </View>
-
-            <Text style={{ color: colors.purple }}>
-              {data.status === 'A'
-                ? (
-                  <View style={styles.statusActive}>
-                    <Text style={styles.statusActiveText}>Ativo</Text>
-                  </View>
-                )
-                : (
-                  <View style={styles.statusCanceled}>
-                    <Text style={styles.statusCanceledText}>Cancelado</Text>
-                  </View>
-                )}
-            </Text>
-          </View>
-
           <View style={styles.appointmentDetail}>
             <Image
-              source={
-                data.user.avatar
+              source={user.scopes[0] === 'USER'
+                ? (data.provider.avatar
+                  ? { uri: data.provider.url }
+                  : { uri: `https://ui-avatars.com/api/?name=${data.provider.name}` })
+                : (data.user.avatar
                   ? { uri: data.user.url }
-                  : { uri: `https://ui-avatars.com/api/?name=${data.user.name}` }
-              }
+                  : { uri: `https://ui-avatars.com/api/?name=${data.user.name}` })}
               style={styles.customerImg}
             />
 
             <View style={styles.appointmentInfo}>
               <Text style={{
-                color: colors.textTitle, fontFamily: fonts.regular, fontWeight: '700', fontSize: 18,
+                color: colors.textNormal, fontFamily: fonts.regular, fontWeight: '700', fontSize: 18,
               }}
               >
-                {formatedName}
+                {user.scopes[0] === 'USER' ? (data.provider.name.length < 17
+                  ? `${data.provider.name}`
+                  : `${data.provider.name.substring(0, 15)}...`)
+                  : (data.user.name.length < 17
+                    ? `${data.user.name}`
+                    : `${data.user.name.substring(0, 15)}...`)}
               </Text>
-              <Text>
+              <Text style={styles.serviceName}>
                 {data.service.title}
               </Text>
             </View>
           </View>
+          <View style={{
+            flexDirection: 'column',
+            paddingBottom: 5,
+            paddingTop: 15,
+          }}
+          >
+            <Text style={{
+              fontSize: 10, paddingBottom: 3, color: colors.darkgray, fontWeight: '500',
+            }}
+            >
+              Data do Agendamento
+            </Text>
+            {/* <Icon name="clock" size={10} /> */}
+            <Text style={styles.date}>
+              {formatDay}
+              {' - '}
+              {formatHour}
+              {' '}
+              hs
+            </Text>
+          </View>
+
         </RectButton>
       </View>
     </Swipeable>

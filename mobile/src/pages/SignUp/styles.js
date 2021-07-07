@@ -20,7 +20,7 @@ export const styles = StyleSheet.create({
     fontSize: 20,
     color: colors.white,
     padding: 5,
-    backgroundColor: '#717DAD',
+    backgroundColor: '#8239D0',
     borderRadius: 10,
   },
   titleText: {

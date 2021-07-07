@@ -26,27 +26,27 @@ import api from '../../services/api';
 const signUpValidationSchema = yup.object().shape({
   name: yup
     .string()
-    .required('Full name is required'),
+    .required('Digite seu nome'),
   // phoneNumber: yup
   //   .string()
   //   .matches(/(01)(\d){8}\b/, 'Enter a valid phone number')
   //   .required('Phone number is required'),
   email: yup
     .string()
-    .email('Please enter valid email')
-    .required('Email is required'),
+    .email('Precisamos de um email válido')
+    .required('Preencha com seu email'),
   password: yup
     .string()
-    // .matches(/\w*[a-z]\w*/, 'Password must have a small letter')
-    // .matches(/\w*[A-Z]\w*/, 'Password must have a capital letter')
-    // .matches(/\d/, 'Password must have a number')
-    // .matches(/[!@#$%^&*()\-_"=+{}; :,<.>]/, 'Password must have a special character')
-    .min(8, ({ min }) => `Password must be at least ${min} characters`)
-    .required('Password is required'),
-  // confirmPassword: yup
-  //   .string()
-  //   .oneOf([yup.ref('password')], 'Passwords do not match')
-  //   .required('Confirm password is required'),
+    .min(6, ({ min }) => `A senha precisa ter no minimo ${min} caracteres`)
+    .required('Preencha sua senha'),
+  // .matches(/\w*[a-z]\w*/, 'Password must have a small letter')
+  // .matches(/\w*[A-Z]\w*/, 'Password must have a capital letter')
+  // .matches(/\d/, 'Password must have a number')
+  // .matches(/[!@#$%^&*()\-_"=+{}; :,<.>]/, 'Password must have a special character')
+  confirmPassword: yup
+    .string()
+    .oneOf([yup.ref('password')], 'As senhas não coincidem')
+    .required('Confirme sua senha'),
 });
 
 export function SignUp() {
@@ -130,6 +130,14 @@ export function SignUp() {
                       name="password"
                       icon="lock"
                       placeholder="Digite a sua senha"
+                      secureTextEntry
+                    />
+
+                    <Field
+                      component={Input}
+                      name="confirmPassword"
+                      icon="lock"
+                      placeholder="Confirme a senha"
                       secureTextEntry
                     />
 

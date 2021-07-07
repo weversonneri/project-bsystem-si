@@ -5,9 +5,8 @@ import fonts from '../../styles/fonts';
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 20,
+    paddingHorizontal: 25,
     paddingVertical: 3,
-    backgroundColor: colors.white,
   },
   cardContainer: {
     width: '100%',
@@ -18,10 +17,15 @@ export const styles = StyleSheet.create({
     alignItems: 'flex-start',
     backgroundColor: colors.shape,
     marginVertical: 5,
+    elevation: 3,
+
   },
   appointmentDetail: {
     flexDirection: 'row',
-    paddingVertical: 15,
+    paddingBottom: 15,
+    paddingTop: 5,
+    borderBottomWidth: 1,
+    borderColor: colors.gray,
   },
   appointmentInfo: {
     flex: 1,
@@ -61,15 +65,22 @@ export const styles = StyleSheet.create({
   },
   buttonRemove: {
     width: 100,
-    height: 85,
+    height: 130,
     backgroundColor: colors.red,
     marginTop: 15,
     borderRadius: 15,
     justifyContent: 'center',
     alignItems: 'center',
     position: 'relative',
-    right: 20,
+    right: 40,
+    top: 0,
     paddingLeft: 15,
+  },
+  serviceName: {
+    color: colors.textNormal,
+    fontFamily: fonts.regular,
+    fontSize: 15,
+    marginTop: 5,
   },
 
 });
