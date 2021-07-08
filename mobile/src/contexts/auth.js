@@ -22,8 +22,8 @@ const AuthProvider = ({ children }) => {
         api.defaults.headers.Authorization = `Bearer ${storagedToken}`;
 
         const isExpired = jwt_decode(storagedToken);
-        if (isExpired.exp < new Date().getTime()) {
-          Alert.alert('Sua sessaõ expirou', 'Realize o login novamente');
+        if (isExpired.exp < Date.now() / 1000) {
+          Alert.alert('Sua sessão expirou', 'Realize o login novamente');
           signOut();
         }
 
