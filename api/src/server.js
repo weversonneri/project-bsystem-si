@@ -15,7 +15,7 @@ app.use(express.urlencoded({ extended: false }));
 
 const PORT = process.env.PORT || 3333;
 
-app.use('/api/uploads', express.static(path.join(__dirname, '..', 'uploads')));
+app.use('/api/uploads', express.static(path.join(__dirname, '..', 'temp', 'uploads')));
 app.use('/api', routes);
 
 app.use((req, res, next) => {

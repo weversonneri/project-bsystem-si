@@ -1,5 +1,6 @@
 const path = require('path');
 const fs = require('fs');
+const aws = require('aws-sdk');
 const { User } = require('../models');
 const { Scope } = require('../models');
 const uploadConfig = require('../../config/upload');
@@ -15,22 +16,42 @@ module.exports = {
           attributes: ['name'],
         },
       });
-      const { filename } = req.file;
+      const { key, location: url = '' } = req.file;
+      const s3 = new aws.S3();
 
       if (!user) {
         return res.status(400).json({ error: true, message: 'User not found!' });
       }
 
-      if (user.avatar) {
-        const userAvatarFilePath = path.join(uploadConfig.directory, user.avatar);
-        const hasAvatar = await fs.promises.stat(userAvatarFilePath);
-
-        if (hasAvatar) {
-          await fs.promises.unlink(userAvatarFilePath);
+      if (process.env.STORAGE_TYPE === 's3') {
+        if (user.avatar) {
+          s3.deleteObject({
+            Bucket: process.env.AWS_S3_BUCKET_NAME,
+            Key: user.avatar,
+          }).promise()
+            .then((response) => {
+              console.log(response);
+            })
+            .catch((response) => {
+              console.log(response);
+            });
         }
-      }
 
-      user.avatar = filename;
+        user.avatar = key;
+        user.url = url;
+      } else {
+        if (user.avatar) {
+          const userAvatarFilePath = path.join(uploadConfig.dest, user.avatar);
+          const hasAvatar = await fs.promises.stat(userAvatarFilePath);
+
+          if (hasAvatar) {
+            await fs.promises.unlink(userAvatarFilePath);
+          }
+        }
+
+        user.avatar = key;
+        user.url = url;
+      }
 
       await user.save();
 

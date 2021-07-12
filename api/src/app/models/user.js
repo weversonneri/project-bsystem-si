@@ -63,10 +63,7 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
     url: {
-      type: DataTypes.VIRTUAL,
-      get() {
-        return `${url}/images/${this.getDataValue('avatar')}`;
-      },
+      type: DataTypes.STRING,
     },
   }, {
     sequelize,
@@ -79,5 +76,13 @@ module.exports = (sequelize, DataTypes) => {
       user.password_hash = await bcrypt.hash(user.password, 8);
     }
   });
+
+  User.addHook('beforeSave', async (user) => {
+    if (!user.url && user.avatar) {
+      // eslint-disable-next-line no-param-reassign
+      user.url = `${url}/images/${user.avatar}`;
+    }
+  });
+
   return User;
 };
